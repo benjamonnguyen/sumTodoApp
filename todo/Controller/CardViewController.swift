@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class CardViewController: UIViewController {
 
@@ -17,20 +18,51 @@ class CardViewController: UIViewController {
     @IBOutlet weak var dueBtn: UIButton!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
-    var visualEffectView: UIVisualEffectView!
+    
+    var blnStarred = false
+    var blnDue = false
+    var index: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
     }
+    
+    override func viewDidLayoutSubviews() {
+        if blnStarred {
+            starBtn.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        } else {
+            starBtn.setImage(UIImage(systemName: "star"), for: .normal)
+        }
+        if blnDue {
+            dueBtn.setImage(UIImage(systemName: "alarm.fill"), for: .normal)
+            datePicker.isHidden = false
+        } else {
+            dueBtn.setImage(UIImage(systemName: "alarm"), for: .normal)
+            datePicker.isHidden = true
+        }
+        saveBtn.isEnabled = todoTextField.text != "" ? true : false
+    }
 
     @IBAction func toggleStar(_ sender: UIButton) {
-        sender.setImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControl.State#>)
+        blnStarred = !blnStarred
     }
     @IBAction func toggleDue(_ sender: UIButton) {
+        blnDue = !blnDue
+        todoTextField.resignFirstResponder()
     }
     @IBAction func saveTodo(_ sender: Any) {
+        let par = parent as! ViewController
+        let todo = index == nil ? Todo(context: par.context) : par.todos[index!]
+        todo.text = todoTextField.text!
+        todo.blnStarred = blnStarred
+        if blnDue {
+            todo.dtmDue = datePicker.date
+        }
+        try! par.context.save()
+        par.handleDismiss()
+        par.fetchTodos()
     }
     /*
     // MARK: - Navigation

@@ -19,13 +19,14 @@ class ViewController: UIViewController {
     var todos: [Todo] = []
     
     var cardViewController:CardViewController!
-    var visualEffectView:UIVisualEffectView!
-    var cardExpanded = false
+    var dimView:UIView!
+    var cardVisible = false
+    var keyboardVisible = false
     var cardHeight:CGFloat!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        // tableView setup
         todayTableView.register(UITableViewCell.self, forCellReuseIdentifier: "TodoCell")
         todayTableView.delegate = self
         todayTableView.dataSource = self
@@ -38,7 +39,21 @@ class ViewController: UIViewController {
         addTodoBtn.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: buttonSize), forImageIn: .normal)
         togglePlannerBtn.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: buttonSize), forImageIn: .normal)
         
-        setupCard()
+        // Keyboard Handler
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleKeyboardShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleKeyboardHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+        
+        initCard()
     }
     
     func fetchTodos() {
@@ -48,14 +63,14 @@ class ViewController: UIViewController {
         }
     }
     
-    func setupCard() {
+    func initCard() {
         // visualEffectView setup
-        visualEffectView = UIVisualEffectView()
-        visualEffectView.frame = view.frame
-        view.addSubview(visualEffectView)
-        visualEffectView.effect = UIBlurEffect(style: .dark)
-        visualEffectView.alpha = 0.4
-        visualEffectView.isHidden = true
+        dimView = UIView()
+        dimView.frame = view.frame
+        view.addSubview(dimView)
+        dimView.backgroundColor = UIColor(white: 0, alpha: 0.4)
+        dimView.alpha = 0
+        dimView.isHidden = true
         
         // cardViewController setup
         cardViewController = CardViewController(nibName: "CardView", bundle: nil)
@@ -65,51 +80,80 @@ class ViewController: UIViewController {
         // cardView setup
         cardHeight = self.view.frame.height/2
         cardViewController.view.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: cardHeight)
+        cardViewController.view.clipsToBounds = true
         cardViewController.view.layer.cornerRadius = 12
         
         // Gesture recognizer setup
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        let swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeDown))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleDismiss))
+        let swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleDismiss))
         swipeGestureRecognizer.direction = .down
-        visualEffectView.addGestureRecognizer(tapGestureRecognizer)
+        dimView.addGestureRecognizer(tapGestureRecognizer)
         cardViewController.handleArea.addGestureRecognizer(swipeGestureRecognizer)
     }
     
+    func setupCard(with todos:[Todo], at index:Int) {
+        // Set up cardView with todo's properties
+        let todo = todos[index]
+        cardViewController.index = index
+        cardViewController.todoTextField.text = todo.text
+        cardViewController.blnStarred = todo.blnStarred
+        if todo.dtmDue != nil {
+            cardViewController.blnDue = true
+            cardViewController.datePicker.date = todo.dtmDue!
+        }
+    }
+    
     func handleCard() {
-        if cardExpanded {
+        if cardVisible {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.cardViewController.view.frame.origin.y = self.view.frame.height
-                self.cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.cardHeight)
-                self.visualEffectView.isHidden = true
+                self.dimView.isHidden = true
+                self.dimView.alpha = 0
             })
-        } else {
+            // Reset cardView
+            self.cardViewController.blnDue = false
+            self.cardViewController.blnStarred = false
+            self.cardViewController.todoTextField.text = ""
+            self.cardViewController.index = nil
+        }
+        else {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height - self.cardHeight, width: self.view.frame.width, height: self.cardHeight)
-                self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight
-                self.visualEffectView.isHidden = false
+                if !self.cardViewController.todoTextField.isFirstResponder {
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight
+                }
+                self.dimView.isHidden = false
+                self.dimView.alpha = 1
             })
         }
-        cardExpanded = !cardExpanded
+        cardVisible = !cardVisible
     }
     
-    @objc func handleTap() {
-        if cardViewController.todoTextField.isFirstResponder {
-            cardViewController.todoTextField.resignFirstResponder()
-        } else {
-            handleCard()
-        }
-    }
-    
-    @objc func handleSwipeDown() {
+    @objc func handleDismiss() {
         cardViewController.todoTextField.resignFirstResponder()
         handleCard()
     }
     
-    @IBAction func addTodo(_ sender: UIButton) {
-        handleCard()
+    @objc func handleKeyboardShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height - keyboardHeight - 130
+                })
+        }
     }
     
-    @IBAction func togglePlanner(_ sender: UIButton) {
+    @objc func handleKeyboardHide(_ notification: Notification) {
+        if let _: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight
+            })
+        }
+    }
+    
+    @IBAction func addTodo(_ sender: UIButton) {
+        cardViewController.todoTextField.becomeFirstResponder()
+        handleCard()
     }
     
 }
@@ -128,6 +172,20 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
         cell.textLabel?.text = todos[indexPath.row].text
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        setupCard(with: todos, at: indexPath.row)
+        handleCard()
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+            self.context.delete(self.todos[indexPath.row])
+            try! self.context.save()
+            self.fetchTodos()
+        }
+        return UISwipeActionsConfiguration(actions: [action])
     }
     
 }

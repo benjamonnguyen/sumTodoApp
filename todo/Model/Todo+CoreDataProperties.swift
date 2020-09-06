@@ -20,7 +20,6 @@ extension Todo {
     @NSManaged public var text: String?
     @NSManaged public var dtmCreated: Date?
     @NSManaged public var dtmCompleted: Date?
-    @NSManaged public var blnCompleted: Bool
     @NSManaged public var dtmDue: Date?
     @NSManaged public var blnStarred: Bool
 }
