@@ -59,7 +59,17 @@ class ViewController: UIViewController {
         DispatchQueue.main.async {
             //Sort
             self.todos.sort {$0.dtmCreated! < $1.dtmCreated!}
+            self.todos.sort {
+                if $0.dtmDue != nil && $1.dtmDue == nil {return true}
+                if let zero = $0.dtmDue, let one = $1.dtmDue {return zero < one}
+                return false
+            }
             self.todos.sort {$0.blnStarred && !$1.blnStarred}
+            self.todos.sort {
+                if $0.dtmCompleted == nil && $1.dtmCompleted != nil {return true}
+                if let zero = $0.dtmCompleted, let one = $1.dtmCompleted {return zero < one}
+                return false
+            }
                 
             self.todoTableView.reloadData()
         }
@@ -178,6 +188,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if todos[indexPath.row].dtmCompleted != nil {
+            return nil
+        }
+        return indexPath
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         setupCard(with: todos, at: indexPath.row)
@@ -198,7 +215,13 @@ extension ViewController: CellDelegate {
     func didCheck(_ cell:TodoCell) {
         if let index = todoTableView.indexPath(for: cell)?.row {
             let todo = todos[index]
-            todo.dtmCompleted = todo.dtmCompleted == nil ? Date() : nil
+            if todo.dtmCompleted == nil {
+                cell.selectionStyle = .none
+                todo.dtmCompleted = Date()
+            } else {
+                cell.selectionStyle = .gray
+                todo.dtmCompleted = nil
+            }
             try! context.save()
             fetchTodos()
         }

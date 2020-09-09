@@ -20,12 +20,31 @@ class TodoCell:UITableViewCell {
         super.awakeFromNib()
     }
     
+    func strikethru(_ text: String, reverse: Bool) -> NSMutableAttributedString {
+        let attributes: [NSAttributedString.Key: Any]
+        if reverse == false {
+            attributes = [
+                .font: UIFont.systemFont(ofSize: 17),
+                .foregroundColor: #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)]
+        } else {
+            attributes = [
+                .font: UIFont.systemFont(ofSize: 17),
+                .foregroundColor: #colorLiteral(red: 0.2458492062, green: 0.2458492062, blue: 0.2458492062, alpha: 1)]
+        }
+        let attributedText =  NSMutableAttributedString(string: text, attributes: attributes)
+        if reverse == false {
+            attributedText.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributedText.length))
+        }
+        return attributedText
+    }
+    
     func setupCell(_ todo:Todo) {
-        todoLabel.text = todo.text
+        let blnCompleted = todo.dtmCompleted != nil
+        todoLabel.attributedText = strikethru(todo.text!, reverse: !blnCompleted)
         
         // Check box
-        checkBtn.tintColor = todo.blnStarred ? #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1) : #colorLiteral(red: 0.6875833043, green: 0.6875833043, blue: 0.6875833043, alpha: 1)
-        let image = todo.dtmCompleted == nil ? UIImage(systemName: "square") : UIImage(systemName: "checkmark.square")
+        checkBtn.tintColor = todo.blnStarred ? #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1) : #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+        let image = blnCompleted ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
         checkBtn.setImage(image, for: .normal)
         
         // Due Date
@@ -37,9 +56,15 @@ class TodoCell:UITableViewCell {
         } else {
             dateLabel.text = ""
         }
+        
+        // Gray out if blnCompleted
+        if blnCompleted {
+            checkBtn.tintColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+            dateLabel.text = ""
+        }
     }
     
-    @IBAction func completeTodo(_ sender: UIButton) {
+    @IBAction func checkTodo(_ sender: UIButton) {
         delegate?.didCheck(self)
     }
     
