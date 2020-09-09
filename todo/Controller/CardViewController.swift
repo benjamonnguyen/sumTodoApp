@@ -30,11 +30,8 @@ class CardViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        if blnStarred {
-            starBtn.setImage(UIImage(systemName: "star.fill"), for: .normal)
-        } else {
-            starBtn.setImage(UIImage(systemName: "star"), for: .normal)
-        }
+        let starImage = blnStarred ? UIImage(systemName: "star.fill") : UIImage(systemName: "star")
+        starBtn.setImage(starImage, for: .normal)
         if blnDue {
             dueBtn.setImage(UIImage(systemName: "alarm.fill"), for: .normal)
             datePicker.isHidden = false
@@ -55,14 +52,19 @@ class CardViewController: UIViewController {
     @IBAction func saveTodo(_ sender: Any) {
         let par = parent as! ViewController
         let todo = index == nil ? Todo(context: par.context) : par.todos[index!]
-        todo.text = todoTextField.text!
-        todo.blnStarred = blnStarred
-        if blnDue {
-            todo.dtmDue = datePicker.date
+        DispatchQueue.main.async {
+            if todo.dtmCreated == nil {
+                todo.dtmCreated = Date()
+            }
+            todo.text = self.todoTextField.text!
+            todo.blnStarred = self.blnStarred
+            if self.blnDue {
+                todo.dtmDue = self.datePicker.date
+            }
+            try! par.context.save()
+            par.handleDismiss()
+            par.fetchTodos()
         }
-        try! par.context.save()
-        par.handleDismiss()
-        par.fetchTodos()
     }
     /*
     // MARK: - Navigation

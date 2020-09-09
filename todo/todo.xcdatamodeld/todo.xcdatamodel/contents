@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Todo" representedClassName="Todo" syncable="YES">
-        <attribute name="blnCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="blnStarred" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="blnCompleted" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="blnStarred" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="dtmCompleted" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dtmCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dtmDue" optional="YES" attributeType="Date" usesScalarValueType="NO"/>

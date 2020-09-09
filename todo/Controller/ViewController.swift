@@ -11,9 +11,8 @@ import CoreData
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var todayTableView: UITableView!
+    @IBOutlet weak var todoTableView: UITableView!
     @IBOutlet weak var addTodoBtn: UIButton!
-    @IBOutlet weak var togglePlannerBtn: UIButton!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var todos: [Todo] = []
@@ -27,9 +26,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // tableView setup
-        todayTableView.register(UITableViewCell.self, forCellReuseIdentifier: "TodoCell")
-        todayTableView.delegate = self
-        todayTableView.dataSource = self
+        todoTableView.register(UINib(nibName: "TodoCell", bundle: nil), forCellReuseIdentifier: "TodoCell")
+        todoTableView.delegate = self
+        todoTableView.dataSource = self
         
         // Get items from Core Data
         fetchTodos()
@@ -37,7 +36,6 @@ class ViewController: UIViewController {
         // Set button size based on screen width?
         let buttonSize = view.frame.width/6
         addTodoBtn.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: buttonSize), forImageIn: .normal)
-        togglePlannerBtn.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: buttonSize), forImageIn: .normal)
         
         // Keyboard Handler
         NotificationCenter.default.addObserver(
@@ -59,12 +57,16 @@ class ViewController: UIViewController {
     func fetchTodos() {
         todos = try! context.fetch(Todo.fetchRequest())
         DispatchQueue.main.async {
-            self.todayTableView.reloadData()
+            //Sort
+            self.todos.sort {$0.dtmCreated! < $1.dtmCreated!}
+            self.todos.sort {$0.blnStarred && !$1.blnStarred}
+                
+            self.todoTableView.reloadData()
         }
     }
     
     func initCard() {
-        // visualEffectView setup
+        // dimView setup
         dimView = UIView()
         dimView.frame = view.frame
         view.addSubview(dimView)
@@ -169,12 +171,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath)
-        cell.textLabel?.text = todos[indexPath.row].text
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) as! TodoCell
+        let todo = todos[indexPath.row]
+        cell.delegate = self
+        cell.setupCell(todo)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         setupCard(with: todos, at: indexPath.row)
         handleCard()
     }
@@ -187,5 +192,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return UISwipeActionsConfiguration(actions: [action])
     }
-    
+}
+
+extension ViewController: CellDelegate {
+    func didCheck(_ cell:TodoCell) {
+        if let index = todoTableView.indexPath(for: cell)?.row {
+            let todo = todos[index]
+            todo.dtmCompleted = todo.dtmCompleted == nil ? Date() : nil
+            try! context.save()
+            fetchTodos()
+        }
+    }
 }
