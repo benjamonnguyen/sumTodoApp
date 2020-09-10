@@ -13,9 +13,11 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var todoTableView: UITableView!
     @IBOutlet weak var addTodoBtn: UIButton!
+    @IBOutlet weak var headerView: UIView!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var todos: [Todo] = []
+    var taskText:String?
     
     var cardViewController:CardViewController!
     var dimView:UIView!
@@ -51,7 +53,19 @@ class ViewController: UIViewController {
             object: nil
         )
         
+        headerView.frame.size.height = view.frame.height/8
+        
         initCard()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        navigationController?.isNavigationBarHidden = true
+        setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
     }
     
     func fetchTodos() {
@@ -202,13 +216,39 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+        //Delete
+        let delete = UIContextualAction(style: .destructive, title: "") { (action, view, completionHandler) in
             self.context.delete(self.todos[indexPath.row])
             try! self.context.save()
             self.fetchTodos()
         }
-        return UISwipeActionsConfiguration(actions: [action])
+        let imgConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .bold, scale: .large)
+        delete.image = UIImage(systemName: "trash.fill", withConfiguration: imgConfig)
+        // Reschedule
+        let reschedule = UIContextualAction(style: .normal, title: "") { (action, view, completionHandler) in
+        }
+        reschedule.image = UIImage(systemName: "calendar", withConfiguration: imgConfig)
+        reschedule.backgroundColor = #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1)
+        // Focus
+        let focus = UIContextualAction(style: .normal, title: "") { (action, view, completionHandler) in
+            self.taskText = self.todos[indexPath.row].text
+            self.performSegue(withIdentifier: "FocusSegue", sender: nil)
+            completionHandler(true)
+        }
+        focus.image = UIImage(systemName: "timer", withConfiguration: imgConfig)
+        focus.backgroundColor = UIColor(red: 0.180, green: 0.584, blue: 0.600, alpha: 1.000)
+        
+        return UISwipeActionsConfiguration(actions: [delete, reschedule, focus])
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "FocusSegue" {
+            if let vc = segue.destination as? FocusViewController {
+                vc.taskLabelText = taskText
+            }
+        }
+    }
+    
 }
 
 extension ViewController: CellDelegate {

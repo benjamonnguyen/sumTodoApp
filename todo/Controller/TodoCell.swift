@@ -20,7 +20,7 @@ class TodoCell:UITableViewCell {
         super.awakeFromNib()
     }
     
-    func strikethru(_ text: String, reverse: Bool) -> NSMutableAttributedString {
+    private func strikethru(_ text: String, reverse: Bool) -> NSMutableAttributedString {
         let attributes: [NSAttributedString.Key: Any]
         if reverse == false {
             attributes = [
@@ -49,10 +49,16 @@ class TodoCell:UITableViewCell {
         
         // Due Date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "M/dd"
         if let dtmDue = todo.dtmDue {
-            dateLabel.text = dateFormatter.string(from: dtmDue)
-            dateLabel.textColor = dtmDue < Date() ? #colorLiteral(red: 0.7959826631, green: 0.09189335398, blue: 0.002260176236, alpha: 1) : #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+            dateFormatter.dateFormat = "MMM dd"
+            var date = dateFormatter.string(from: dtmDue)
+            if date == dateFormatter.string(from: Date()) {
+                dateFormatter.dateFormat = "h:mma"
+                date = dateFormatter.string(from: dtmDue)
+            }
+            dateLabel.text = date
+            dateLabel.textColor = dtmDue < Date() &&
+                dtmDue.timeIntervalSinceNow < -86400 ? #colorLiteral(red: 0.7959826631, green: 0.09189335398, blue: 0.002260176236, alpha: 1) : #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         } else {
             dateLabel.text = ""
         }
