@@ -27,6 +27,7 @@ class FocusViewController: UIViewController {
     var duration:Int!
     var minutes:Int!
     var seconds:Int!
+    var lastDuration:Int!
     var blnStarted = false
     var pausedTime:CFTimeInterval?
     let durations = Array(stride(from: 5, through: 60, by: 5))
@@ -47,7 +48,7 @@ class FocusViewController: UIViewController {
     private func setupViews() {
         taskLabel.text = taskLabelText
         seconds = 0
-        minutes = 25
+        lastDuration = 25
         durationPicker.isHidden = true
         view.bringSubviewToFront(timerView)
         timerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(changeDuration)))
@@ -70,8 +71,8 @@ class FocusViewController: UIViewController {
     private func setupTimer() {
         let center = view.center
         let radius = view.frame.width/3
-        let circlePath = UIBezierPath(arcCenter: center, radius: radius, startAngle: -CGFloat.pi/2, endAngle: 1.5*CGFloat.pi, clockwise: true)
-        
+        let circlePath = UIBezierPath(arcCenter: center, radius: radius, startAngle: -CGFloat.pi*0.48, endAngle: CGFloat.pi*1.52, clockwise: true)
+
         let timerLayer = CAShapeLayer()
         timerLayer.path = circlePath.cgPath
         timerLayer.strokeColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
@@ -126,8 +127,10 @@ class FocusViewController: UIViewController {
                 secondsLabel.text = ""
                 timerView.isUserInteractionEnabled = true
                 startBtn.setTitle("restart", for: .normal)
-                blnStarted = !blnStarted
+                seconds = 0
+                pausedTime = nil
                 timer.invalidate()
+                blnStarted = !blnStarted
                 return
             } else {
                 minutes -= 1
@@ -142,24 +145,29 @@ class FocusViewController: UIViewController {
     
     @objc private func handleDismiss() {
         if !durationPicker.isHidden {
-            minutesLabel.text = minutes < 10 ? "0\(minutes!)" : "\(minutes!)"
+            if colonLabel.text == ":" {
+                minutesLabel.text = minutes < 10 ? "0\(minutes!)" : "\(minutes!)"
+            }
             durationPicker.isHidden = true
             timerView.isHidden = false
         }
     }
     
-    @IBAction func startTimer(_ sender: UIButton) {
+    @IBAction private func startTimer(_ sender: UIButton) {
         if !blnStarted {
-            minutesLabel.text = minutes < 10 ? "0\(minutes!)" : "\(minutes!)"
-            durationPicker.isHidden = true
-            timerView.isHidden = false
-            timerView.isUserInteractionEnabled = false
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
             if pausedTime == nil {
+                minutes = lastDuration
+                minutesLabel.text = minutes < 10 ? "0\(lastDuration!)" : "\(lastDuration!)"
+                colonLabel.text = ":"
+                secondsLabel.text = "00"
+                durationPicker.isHidden = true
+                timerView.isHidden = false
+                timerView.isUserInteractionEnabled = false
                 startAnimation(minutes: CFTimeInterval(minutes))
             } else {
                 resumeAnimation()
             }
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
         } else {
             pauseAnimation()
             timer.invalidate()
@@ -169,7 +177,7 @@ class FocusViewController: UIViewController {
         startBtn.setTitle(text, for: .normal)
     }
     
-    @IBAction func endTimer(_ sender: UIButton) {
+    @IBAction private func endTimer(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -185,7 +193,7 @@ extension FocusViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        minutes = durations[row]
+        lastDuration = durations[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {

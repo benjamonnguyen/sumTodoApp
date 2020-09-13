@@ -24,11 +24,11 @@ class TodoCell:UITableViewCell {
         let attributes: [NSAttributedString.Key: Any]
         if reverse == false {
             attributes = [
-                .font: UIFont.systemFont(ofSize: 17),
+                .font: UIFont.systemFont(ofSize: K.fontSize),
                 .foregroundColor: #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)]
         } else {
             attributes = [
-                .font: UIFont.systemFont(ofSize: 17),
+                .font: UIFont.systemFont(ofSize: K.fontSize),
                 .foregroundColor: #colorLiteral(red: 0.2458492062, green: 0.2458492062, blue: 0.2458492062, alpha: 1)]
         }
         let attributedText =  NSMutableAttributedString(string: text, attributes: attributes)
@@ -44,11 +44,14 @@ class TodoCell:UITableViewCell {
         
         // Check box
         checkBtn.tintColor = todo.blnStarred ? #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1) : #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
-        let image = blnCompleted ? UIImage(systemName: "checkmark.square") : UIImage(systemName: "square")
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: K.fontSize, weight: .semibold)
+        let image = blnCompleted ? UIImage(systemName: "checkmark.square", withConfiguration: symbolConfig) : UIImage(systemName: "square", withConfiguration: symbolConfig)
         checkBtn.setImage(image, for: .normal)
         
         // Due Date
         let dateFormatter = DateFormatter()
+        dateFormatter.amSymbol = "am"
+        dateFormatter.pmSymbol = "pm"
         if let dtmDue = todo.dtmDue {
             dateFormatter.dateFormat = "MMM dd"
             var date = dateFormatter.string(from: dtmDue)
@@ -67,10 +70,13 @@ class TodoCell:UITableViewCell {
         if blnCompleted {
             checkBtn.tintColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
             dateLabel.text = ""
+            selectionStyle = .none
+        } else {
+            selectionStyle = .gray
         }
     }
     
-    @IBAction func checkTodo(_ sender: UIButton) {
+    @IBAction private func checkTodo(_ sender: UIButton) {
         delegate?.didCheck(self)
     }
     
