@@ -11,4 +11,5 @@ import UIKit
 class K {
     static var fontSize:CGFloat = 15
     static let addTodoPhrases = ["What's next on the chopping block?", "Let's get this bread!", "Let's knock out a quick chore.", "Got the coffee brewing?", "Take it one task at a time.", "One foot in front of the other.", "Toast to a butter you!"]
+    static let lightThemeColor = #colorLiteral(red: 0.4784313725, green: 0.5058823529, blue: 1, alpha: 1)
 }

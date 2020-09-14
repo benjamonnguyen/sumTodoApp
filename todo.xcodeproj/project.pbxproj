@@ -10,11 +10,13 @@
 		B11E020D25089CF8009566F0 /* TodoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11E020B25089CF8009566F0 /* TodoCell.swift */; };
 		B11E020E25089CF8009566F0 /* TodoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B11E020C25089CF8009566F0 /* TodoCell.xib */; };
 		B13427F4250930FB00A58C25 /* FocusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B13427F2250930FB00A58C25 /* FocusViewController.swift */; };
-		B13427FA250A728700A58C25 /* RescheduleCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B13427F8250A728700A58C25 /* RescheduleCardViewController.swift */; };
-		B13427FB250A728700A58C25 /* RescheduleCard.xib in Resources */ = {isa = PBXBuildFile; fileRef = B13427F9250A728700A58C25 /* RescheduleCard.xib */; };
+		B13427FA250A728700A58C25 /* RescheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B13427F8250A728700A58C25 /* RescheduleViewController.swift */; };
+		B13427FB250A728700A58C25 /* RescheduleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B13427F9250A728700A58C25 /* RescheduleView.xib */; };
 		B14D44EB24FF500D000B4DAE /* Todo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14D44E924FF500D000B4DAE /* Todo+CoreDataClass.swift */; };
 		B14D44EC24FF500D000B4DAE /* Todo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14D44EA24FF500D000B4DAE /* Todo+CoreDataProperties.swift */; };
 		B16233BC250D52A700AB1F32 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16233BB250D52A700AB1F32 /* Constants.swift */; };
+		B16233D0250EC2AC00AB1F32 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16233CE250EC2AC00AB1F32 /* CalendarViewController.swift */; };
+		B16233D1250EC2AC00AB1F32 /* CalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B16233CF250EC2AC00AB1F32 /* CalendarView.xib */; };
 		B1D37156250122B60075C5E7 /* TodoCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D37154250122B60075C5E7 /* TodoCardViewController.swift */; };
 		B1D37157250122B60075C5E7 /* TodoCard.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1D37155250122B60075C5E7 /* TodoCard.xib */; };
 		B1F5467F24FC863A00A24F16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F5467E24FC863A00A24F16 /* AppDelegate.swift */; };
@@ -34,11 +36,13 @@
 		B11E020B25089CF8009566F0 /* TodoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCell.swift; sourceTree = "<group>"; };
 		B11E020C25089CF8009566F0 /* TodoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TodoCell.xib; sourceTree = "<group>"; };
 		B13427F2250930FB00A58C25 /* FocusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusViewController.swift; sourceTree = "<group>"; };
-		B13427F8250A728700A58C25 /* RescheduleCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RescheduleCardViewController.swift; sourceTree = "<group>"; };
-		B13427F9250A728700A58C25 /* RescheduleCard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RescheduleCard.xib; sourceTree = "<group>"; };
+		B13427F8250A728700A58C25 /* RescheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RescheduleViewController.swift; sourceTree = "<group>"; };
+		B13427F9250A728700A58C25 /* RescheduleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RescheduleView.xib; sourceTree = "<group>"; };
 		B14D44E924FF500D000B4DAE /* Todo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Todo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		B14D44EA24FF500D000B4DAE /* Todo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Todo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B16233BB250D52A700AB1F32 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		B16233CE250EC2AC00AB1F32 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		B16233CF250EC2AC00AB1F32 /* CalendarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarView.xib; sourceTree = "<group>"; };
 		B1D37154250122B60075C5E7 /* TodoCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCardViewController.swift; sourceTree = "<group>"; };
 		B1D37155250122B60075C5E7 /* TodoCard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TodoCard.xib; sourceTree = "<group>"; };
 		B1F5467B24FC863A00A24F16 /* todo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = todo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,7 +100,8 @@
 				B1D37154250122B60075C5E7 /* TodoCardViewController.swift */,
 				B11E020B25089CF8009566F0 /* TodoCell.swift */,
 				B13427F2250930FB00A58C25 /* FocusViewController.swift */,
-				B13427F8250A728700A58C25 /* RescheduleCardViewController.swift */,
+				B13427F8250A728700A58C25 /* RescheduleViewController.swift */,
+				B16233CE250EC2AC00AB1F32 /* CalendarViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -107,7 +112,8 @@
 				B1F5468424FC863A00A24F16 /* Main.storyboard */,
 				B1D37155250122B60075C5E7 /* TodoCard.xib */,
 				B11E020C25089CF8009566F0 /* TodoCell.xib */,
-				B13427F9250A728700A58C25 /* RescheduleCard.xib */,
+				B13427F9250A728700A58C25 /* RescheduleView.xib */,
+				B16233CF250EC2AC00AB1F32 /* CalendarView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -220,8 +226,9 @@
 				B1F5468B24FC864200A24F16 /* Assets.xcassets in Resources */,
 				B1D37157250122B60075C5E7 /* TodoCard.xib in Resources */,
 				B11E020E25089CF8009566F0 /* TodoCell.xib in Resources */,
-				B13427FB250A728700A58C25 /* RescheduleCard.xib in Resources */,
+				B13427FB250A728700A58C25 /* RescheduleView.xib in Resources */,
 				B1F5468624FC863A00A24F16 /* Main.storyboard in Resources */,
+				B16233D1250EC2AC00AB1F32 /* CalendarView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,6 +281,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B16233D0250EC2AC00AB1F32 /* CalendarViewController.swift in Sources */,
 				B14D44EC24FF500D000B4DAE /* Todo+CoreDataProperties.swift in Sources */,
 				B16233BC250D52A700AB1F32 /* Constants.swift in Sources */,
 				B1D37156250122B60075C5E7 /* TodoCardViewController.swift in Sources */,
@@ -281,7 +289,7 @@
 				B1F5468324FC863A00A24F16 /* ViewController.swift in Sources */,
 				B1F5467F24FC863A00A24F16 /* AppDelegate.swift in Sources */,
 				B1F5468124FC863A00A24F16 /* SceneDelegate.swift in Sources */,
-				B13427FA250A728700A58C25 /* RescheduleCardViewController.swift in Sources */,
+				B13427FA250A728700A58C25 /* RescheduleViewController.swift in Sources */,
 				B1F5468924FC863A00A24F16 /* todo.xcdatamodeld in Sources */,
 				B13427F4250930FB00A58C25 /* FocusViewController.swift in Sources */,
 				B11E020D25089CF8009566F0 /* TodoCell.swift in Sources */,

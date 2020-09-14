@@ -13,15 +13,21 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var todoTableView: UITableView!
     @IBOutlet weak var addTodoBtn: UIButton!
+    @IBOutlet weak var undoDeleteBtn: UIButton!
     @IBOutlet weak var headerView: UIView!
+    @IBOutlet weak var completedCount: UILabel!
+    @IBOutlet weak var goalCount: UILabel!
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var todos: [Todo] = []
     var taskText:String?
     
+    var leadingConstraint: NSLayoutConstraint?
     var todoCardVC:TodoCardViewController!
-    var rescheduleCardVC:RescheduleCardViewController!
+    var rescheduleVC:RescheduleViewController!
+    var calendarVC:CalendarViewController!
     var dimView:UIView!
+    var invisibleView:UIView!
     var cardHeight:CGFloat!
     
     override func viewDidLoad() {
@@ -32,13 +38,14 @@ class ViewController: UIViewController {
         todoTableView.delegate = self
         todoTableView.dataSource = self
         
-        // Get items from Core Data
+        // Core Data: Todo setup
+        context.undoManager = UndoManager()
         archiveCompleted()
         fetchTodos()
         
-        // Set button size based on screen width?
-        let buttonSize = view.frame.width/6
-        addTodoBtn.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: buttonSize), forImageIn: .normal)
+        // Misc setup
+        undoDeleteBtn.centerYAnchor.constraint(equalTo: addTodoBtn.centerYAnchor).isActive = true
+        undoDeleteBtn.frame.origin.x = -100
         
         // Keyboard Handler
         NotificationCenter.default.addObserver(
@@ -54,7 +61,7 @@ class ViewController: UIViewController {
             object: nil
         )
         
-        initCard()
+        initSubviews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,6 +74,7 @@ class ViewController: UIViewController {
         .lightContent
     }
     
+    // MARK: Class functions
     func fetchTodos() {
         todos = try! context.fetch(Todo.fetchRequest())
         DispatchQueue.main.async {
@@ -84,6 +92,14 @@ class ViewController: UIViewController {
             }
             self.todoTableView.reloadData()
         }
+        goalCount.text = "\(max(5, todos.count))"
+        let completed = todos.filter { todo in
+            if todo.dtmCompleted != nil {
+                return true
+            }
+            return false
+        }
+        completedCount.text = "\(completed.count)"
     }
     
     private func archiveCompleted() {
@@ -107,7 +123,7 @@ class ViewController: UIViewController {
         }
     }
     
-    private func initCard() {
+    private func initSubviews() {
         // dimView setup
         dimView = UIView()
         dimView.frame = view.frame
@@ -115,6 +131,13 @@ class ViewController: UIViewController {
         dimView.backgroundColor = UIColor(white: 0, alpha: 0.4)
         dimView.alpha = 0
         dimView.isHidden = true
+        
+        // invisibleView setup
+        invisibleView = UIView()
+        invisibleView.frame = view.frame
+        view.addSubview(invisibleView)
+        invisibleView.backgroundColor = UIColor(white: 1, alpha: 0)
+        invisibleView.isHidden = true
         
         // todoCardVC setup
         todoCardVC = TodoCardViewController(nibName: "TodoCard", bundle: nil)
@@ -125,21 +148,30 @@ class ViewController: UIViewController {
         todoCardVC.view.clipsToBounds = true
         todoCardVC.view.layer.cornerRadius = 12
         
-        // rescheduleCardVC setup
-        rescheduleCardVC = RescheduleCardViewController(nibName: "RescheduleCard", bundle: nil)
-        self.addChild(rescheduleCardVC)
-        view.addSubview(rescheduleCardVC.view)
-        rescheduleCardVC.view.isHidden = true
-        rescheduleCardVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.width/2)
-        rescheduleCardVC.view.center = CGPoint(x: view.frame.width/2, y: view.frame.height/2)
-        rescheduleCardVC.view.clipsToBounds = true
-        rescheduleCardVC.view.layer.cornerRadius = 12
+        // rescheduleVC setup
+        rescheduleVC = RescheduleViewController(nibName: "RescheduleView", bundle: nil)
+        self.addChild(rescheduleVC)
+        view.addSubview(rescheduleVC.view)
+        rescheduleVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.width/2)
+        rescheduleVC.view.center = view.center
+        rescheduleVC.view.layer.cornerRadius = 12
+        
+        // calendarVC setup
+        calendarVC = CalendarViewController(nibName: "CalendarView", bundle: nil)
+        self.addChild(calendarVC)
+        view.addSubview(calendarVC.view)
+        calendarVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.width)
+        calendarVC.view.center = view.center
+        calendarVC.view.isHidden = false
+        calendarVC.view.layer.cornerRadius = 12
+        
         
         // Gesture recognizer setup
         let swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleDismiss))
         swipeGestureRecognizer.direction = .down
         dimView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
         todoCardVC.handleArea.addGestureRecognizer(swipeGestureRecognizer)
+        invisibleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissUndo)))
     }
     
     private func setupCard(with todos:[Todo], at index:Int) {
@@ -157,22 +189,21 @@ class ViewController: UIViewController {
     private func handleEditTodo() {
         todoCardVC.todoTextView.isHidden = false
         todoCardVC.todoTextField.isHidden = true
+        dimView.isHidden = false
         todoCardVC.todoTextView.becomeFirstResponder()
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.todoCardVC.view.frame.origin.y = self.view.frame.height - self.cardHeight*1.275
-            self.dimView.isHidden = false
+            self.todoCardVC.view.frame.origin.y = self.view.frame.height - self.cardHeight*1.14
             self.dimView.alpha = 1
         })
     }
     
+    // MARK: @objc functions
     @objc func handleDismiss() {
         if todoCardVC.view.frame.origin.y < view.frame.height {
             todoCardVC.todoTextField.resignFirstResponder()
             todoCardVC.todoTextView.resignFirstResponder()
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.todoCardVC.view.frame.origin.y = self.view.frame.height
-                self.dimView.isHidden = true
-                self.dimView.alpha = 0
             })
             // Reset todoCard
             todoCardVC.blnDue = false
@@ -180,14 +211,14 @@ class ViewController: UIViewController {
             todoCardVC.todoTextField.text = ""
             todoCardVC.index = nil
         } else {
-            rescheduleCardVC.view.isHidden = true
+            rescheduleVC.view.isHidden = true
         }
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.dimView.isHidden = true
             self.dimView.alpha = 0
         })
+        dimView.isHidden = true
     }
-
+    
     @objc func handleKeyboardShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
@@ -206,18 +237,44 @@ class ViewController: UIViewController {
         }
     }
     
+    @objc private func dismissUndo() {
+        if undoDeleteBtn.frame.origin.x == 20 {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
+                self.undoDeleteBtn.frame.origin.x = -100
+            })
+            DispatchQueue.main.async {
+                try! self.context.save()
+                self.fetchTodos()
+            }
+            invisibleView.isHidden = true
+        }
+    }
+    
+    // MARK: @IBAction functions
     @IBAction private func addTodo(_ sender: UIButton) {
         todoCardVC.todoTextView.isHidden = true
         todoCardVC.todoTextField.isHidden = false
+        dimView.isHidden = false
         todoCardVC.todoTextField.becomeFirstResponder()
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.dimView.isHidden = false
             self.dimView.alpha = 1
         })
     }
     
+    @IBAction func undoDelete(_ sender: UIButton) {
+         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
+            self.undoDeleteBtn.frame.origin.x = -100
+        })
+        DispatchQueue.main.async {
+            self.context.undo()
+            try! self.context.save()
+            self.fetchTodos()
+        }
+        invisibleView.isHidden = true
+    }
 }
 
+// MARK: extensions
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -236,12 +293,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if todos[indexPath.row].dtmCompleted != nil {
-            return nil
-        }
-        return indexPath
-    }
+//    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+//        if todos[indexPath.row].dtmCompleted != nil {
+//            return nil
+//        }
+//        return indexPath
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         setupCard(with: todos, at: indexPath.row)
@@ -253,21 +310,28 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         //Delete
         let delete = UIContextualAction(style: .destructive, title: "") { (action, view, completionHandler) in
             self.context.delete(self.todos[indexPath.row])
-            try! self.context.save()
             self.fetchTodos()
+            self.invisibleView.isHidden = false
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.undoDeleteBtn.frame.origin.x = 20
+            })
+            self.view.bringSubviewToFront(self.undoDeleteBtn)
         }
         let imgConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .bold, scale: .large)
         delete.image = UIImage(systemName: "trash.fill", withConfiguration: imgConfig)
         // Reschedule
         let reschedule = UIContextualAction(style: .normal, title: "") { (action, view, completionHandler) in
-            self.rescheduleCardVC.index = indexPath.row
+            self.rescheduleVC.index = indexPath.row
             self.dimView.isHidden = false
-            self.dimView.alpha = 1
-            self.rescheduleCardVC.view.isHidden = false
+            self.rescheduleVC.view.isHidden = false
+            UIView.animate(withDuration: 0.4, delay: 0, animations: {
+                self.dimView.alpha = 1
+                self.rescheduleVC.view.alpha = 1
+            })
             completionHandler(true)
         }
         reschedule.image = UIImage(systemName: "calendar", withConfiguration: imgConfig)
-        reschedule.backgroundColor = #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1)
+        reschedule.backgroundColor = #colorLiteral(red: 1, green: 0.831372549, blue: 0.4745098039, alpha: 1)
         // Focus
         let focus = UIContextualAction(style: .normal, title: "") { (action, view, completionHandler) in
             self.taskText = self.todos[indexPath.row].text

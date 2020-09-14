@@ -6,4 +6,5 @@ target 'todo' do
 
   # Pods for todo
   pod 'IQKeyboardManager'
+  pod 'FSCalendar'
 end
