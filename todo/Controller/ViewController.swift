@@ -11,7 +11,7 @@ import CoreData
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var todoTableView: UITableView!
+    @IBOutlet weak var todoTableView: TodoTableView!
     @IBOutlet weak var addTodoBtn: UIButton!
     @IBOutlet weak var undoDeleteBtn: UIButton!
     @IBOutlet weak var headerView: UIView!
@@ -22,13 +22,12 @@ class ViewController: UIViewController {
     var todos: [Todo] = []
     var taskText:String?
     
-    var leadingConstraint: NSLayoutConstraint?
+    var keyboardHeight:CGFloat!
     var todoCardVC:TodoCardViewController!
     var rescheduleVC:RescheduleViewController!
     var calendarVC:CalendarViewController!
     var dimView:UIView!
-    var invisibleView:UIView!
-    var cardHeight:CGFloat!
+    var cardHeight:CGFloat! = 175
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,10 +41,6 @@ class ViewController: UIViewController {
         context.undoManager = UndoManager()
         archiveCompleted()
         fetchTodos()
-        
-        // Misc setup
-        undoDeleteBtn.centerYAnchor.constraint(equalTo: addTodoBtn.centerYAnchor).isActive = true
-        undoDeleteBtn.frame.origin.x = -100
         
         // Keyboard Handler
         NotificationCenter.default.addObserver(
@@ -62,6 +57,11 @@ class ViewController: UIViewController {
         )
         
         initSubviews()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        dismissUndo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -132,18 +132,17 @@ class ViewController: UIViewController {
         dimView.alpha = 0
         dimView.isHidden = true
         
-        // invisibleView setup
-        invisibleView = UIView()
-        invisibleView.frame = view.frame
-        view.addSubview(invisibleView)
-        invisibleView.backgroundColor = UIColor(white: 1, alpha: 0)
-        invisibleView.isHidden = true
+//         invisibleView setup
+//        invisibleView = UIView()
+//        invisibleView.frame = view.frame
+//        view.addSubview(invisibleView)
+//        invisibleView.backgroundColor = UIColor(white: 1, alpha: 0)
+//        invisibleView.isHidden = true
         
         // todoCardVC setup
         todoCardVC = TodoCardViewController(nibName: "TodoCard", bundle: nil)
         self.addChild(todoCardVC)
         view.addSubview(todoCardVC.view)
-        cardHeight = self.view.frame.height/2
         todoCardVC.view.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: cardHeight)
         todoCardVC.view.clipsToBounds = true
         todoCardVC.view.layer.cornerRadius = 12
@@ -157,21 +156,26 @@ class ViewController: UIViewController {
         rescheduleVC.view.layer.cornerRadius = 12
         
         // calendarVC setup
-        calendarVC = CalendarViewController(nibName: "CalendarView", bundle: nil)
-        self.addChild(calendarVC)
-        view.addSubview(calendarVC.view)
-        calendarVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.width)
-        calendarVC.view.center = view.center
-        calendarVC.view.isHidden = false
-        calendarVC.view.layer.cornerRadius = 12
+//        calendarVC = CalendarViewController(nibName: "CalendarView", bundle: nil)
+//        self.addChild(calendarVC)
+//        view.addSubview(calendarVC.view)
+//        calendarVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.width)
+//        calendarVC.view.center = view.center
+//        calendarVC.view.isHidden = false
+//        calendarVC.view.layer.cornerRadius = 12
         
         
         // Gesture recognizer setup
         let swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleDismiss))
         swipeGestureRecognizer.direction = .down
+        let tapGestureRecogizer = UITapGestureRecognizer(target: self, action: #selector(dismissUndo))
+        tapGestureRecogizer.cancelsTouchesInView = false
+
         dimView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
         todoCardVC.handleArea.addGestureRecognizer(swipeGestureRecognizer)
-        invisibleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissUndo)))
+        addTodoBtn.addGestureRecognizer(tapGestureRecogizer)
+        
+        undoDeleteBtn.frame.origin.x = -100
     }
     
     private func setupCard(with todos:[Todo], at index:Int) {
@@ -192,7 +196,7 @@ class ViewController: UIViewController {
         dimView.isHidden = false
         todoCardVC.todoTextView.becomeFirstResponder()
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.todoCardVC.view.frame.origin.y = self.view.frame.height - self.cardHeight*1.14
+            self.todoCardVC.view.frame.origin.y = self.view.frame.height - self.keyboardHeight - self.cardHeight + 10
             self.dimView.alpha = 1
         })
     }
@@ -222,22 +226,19 @@ class ViewController: UIViewController {
     @objc func handleKeyboardShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                    self.todoCardVC.view.frame.origin.y = self.view.frame.height - keyboardHeight - 130
-                })
+            keyboardHeight = keyboardRectangle.height
         }
     }
     
     @objc func handleKeyboardHide(_ notification: Notification) {
         if let _: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.todoCardVC.view.frame.origin.y = self.view.frame.height - self.cardHeight
+                self.todoCardVC.view.frame.origin.y = self.view.frame.height
             })
         }
     }
     
-    @objc private func dismissUndo() {
+    @objc public func dismissUndo() {
         if undoDeleteBtn.frame.origin.x == 20 {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
                 self.undoDeleteBtn.frame.origin.x = -100
@@ -246,7 +247,6 @@ class ViewController: UIViewController {
                 try! self.context.save()
                 self.fetchTodos()
             }
-            invisibleView.isHidden = true
         }
     }
     
@@ -257,6 +257,7 @@ class ViewController: UIViewController {
         dimView.isHidden = false
         todoCardVC.todoTextField.becomeFirstResponder()
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.todoCardVC.view.frame.origin.y = self.view.frame.height - self.keyboardHeight - self.cardHeight + 45
             self.dimView.alpha = 1
         })
     }
@@ -270,7 +271,6 @@ class ViewController: UIViewController {
             try! self.context.save()
             self.fetchTodos()
         }
-        invisibleView.isHidden = true
     }
 }
 
@@ -293,12 +293,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-//        if todos[indexPath.row].dtmCompleted != nil {
-//            return nil
-//        }
-//        return indexPath
-//    }
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if todos[indexPath.row].dtmCompleted != nil {
+            return nil
+        }
+        return indexPath
+    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         setupCard(with: todos, at: indexPath.row)
@@ -311,7 +311,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let delete = UIContextualAction(style: .destructive, title: "") { (action, view, completionHandler) in
             self.context.delete(self.todos[indexPath.row])
             self.fetchTodos()
-            self.invisibleView.isHidden = false
+            self.undoDeleteBtn.frame.origin.y = self.addTodoBtn.frame.origin.y
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.undoDeleteBtn.frame.origin.x = 20
             })
@@ -358,12 +358,29 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ViewController: CellDelegate {
     func didCheck(_ cell:TodoCell) {
+        dismissUndo()
         if let index = todoTableView.indexPath(for: cell)?.row {
             let todo = todos[index]
             DispatchQueue.main.async {
                 todo.dtmCompleted = todo.dtmCompleted == nil ? Date() : nil
                 try! self.context.save()
                 self.fetchTodos()
+            }
+        }
+    }
+}
+
+class TodoTableView: UITableView {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        let del = delegate as! ViewController
+        if del.undoDeleteBtn.frame.origin.x == 20 {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
+                del.undoDeleteBtn.frame.origin.x = -100
+            })
+            DispatchQueue.main.async {
+                try! del.context.save()
+                del.fetchTodos()
             }
         }
     }
