@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         IQKeyboardManager.shared().isEnabled = false
         IQKeyboardManager.shared().isEnableAutoToolbar = false
+        UserDefaults.standard.register(defaults: ["focusDuration":25, "breakDuration":5])
         return true
     }
     // MARK: UISceneSession Lifecycle
