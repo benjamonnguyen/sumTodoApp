@@ -33,20 +33,15 @@ class TodoCardViewController: UIViewController {
         todoTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        todoTextField.placeholder = K.addTodoPhrases.randomElement()
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let starImage = blnStarred ? UIImage(systemName: "star.fill") : UIImage(systemName: "star")
         starBtn.setImage(starImage, for: .normal)
         if blnDue {
-            dueBtn.setImage(UIImage(systemName: "alarm.fill"), for: .normal)
+            dueBtn.tintColor = K.secondaryLightColor
 //            datePicker.isHidden = false
         } else {
-            dueBtn.setImage(UIImage(systemName: "alarm"), for: .normal)
+            dueBtn.tintColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
 //            datePicker.isHidden = true
         }
     }
@@ -59,8 +54,11 @@ class TodoCardViewController: UIViewController {
         blnStarred = !blnStarred
     }
     @IBAction private func toggleDue(_ sender: UIButton) {
-        blnDue = !blnDue
-        todoTextField.resignFirstResponder()
+        if index != nil {
+            par.calendarVC.index = index
+        }
+        par.handleDismiss()
+        par.calendarVC.view.isHidden = false
     }
     @IBAction private func saveTodo(_ sender: Any) {
         let todo = index == nil ? Todo(context: par.context) : par.todos[index!]
@@ -81,12 +79,7 @@ class TodoCardViewController: UIViewController {
 }
 
 extension TodoCardViewController: UITextViewDelegate {
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        true
-    }
-    
     func textViewDidChange(_ textView: UITextView) {
         saveBtn.isEnabled = todoTextView.text != "" && todoTextView.text != par.todos[index!].text ? true : false
     }
-    
 }

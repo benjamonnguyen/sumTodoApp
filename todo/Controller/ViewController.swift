@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var todos: [Todo] = []
-    var taskText:String?
+    var index:Int?
     
     var keyboardHeight:CGFloat!
     var todoCardVC:TodoCardViewController!
@@ -110,14 +110,7 @@ class ViewController: UIViewController {
                 let today = Calendar.current.startOfDay(for: Date())
                 if dC >= today {continue}
                 DispatchQueue.main.async {
-                    let archivedTodo = ArchivedTodo(context: self.context)
-                    archivedTodo.blnStarred = todo.blnStarred
-                    archivedTodo.dtmCompleted = todo.dtmCompleted
-                    archivedTodo.dtmCreated = todo.dtmCreated
-                    archivedTodo.text = todo.text
-                    archivedTodo.dtmDue = todo.dtmDue
-                    self.context.delete(todo)
-                    try! self.context.save()
+                    todo.archive(entity: todo.entity, context: self.context)
                 }
             }
         }
@@ -156,13 +149,12 @@ class ViewController: UIViewController {
         rescheduleVC.view.layer.cornerRadius = 12
         
         // calendarVC setup
-//        calendarVC = CalendarViewController(nibName: "CalendarView", bundle: nil)
-//        self.addChild(calendarVC)
-//        view.addSubview(calendarVC.view)
-//        calendarVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.width)
-//        calendarVC.view.center = view.center
-//        calendarVC.view.isHidden = false
-//        calendarVC.view.layer.cornerRadius = 12
+        calendarVC = CalendarViewController(nibName: "CalendarView", bundle: nil)
+        self.addChild(calendarVC)
+        view.addSubview(calendarVC.view)
+        calendarVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.width)
+        calendarVC.view.center = view.center
+        calendarVC.view.layer.cornerRadius = 12
         
         
         // Gesture recognizer setup
@@ -255,6 +247,7 @@ class ViewController: UIViewController {
         todoCardVC.todoTextView.isHidden = true
         todoCardVC.todoTextField.isHidden = false
         dimView.isHidden = false
+        todoCardVC.todoTextField.placeholder = K.addTodoPhrases.randomElement()
         todoCardVC.todoTextField.becomeFirstResponder()
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.todoCardVC.view.frame.origin.y = self.view.frame.height - self.keyboardHeight - self.cardHeight + 45
@@ -270,6 +263,18 @@ class ViewController: UIViewController {
             self.context.undo()
             try! self.context.save()
             self.fetchTodos()
+        }
+    }
+    
+    @IBAction func unwindToTodo(_ segue: UIStoryboardSegue) {
+        if segue.identifier == "TodoUnwind" {
+            let source = segue.source as! FocusViewController
+            let todo = todos[source.index]
+            DispatchQueue.main.async {
+                todo.dtmCompleted = Date()
+                try! self.context.save()
+                self.fetchTodos()
+            }
         }
     }
 }
@@ -331,15 +336,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             completionHandler(true)
         }
         reschedule.image = UIImage(systemName: "calendar", withConfiguration: imgConfig)
-        reschedule.backgroundColor = #colorLiteral(red: 1, green: 0.831372549, blue: 0.4745098039, alpha: 1)
+        reschedule.backgroundColor = K.secondaryLightColor
         // Focus
         let focus = UIContextualAction(style: .normal, title: "") { (action, view, completionHandler) in
-            self.taskText = self.todos[indexPath.row].text
+            self.index = indexPath.row
             self.performSegue(withIdentifier: "FocusSegue", sender: nil)
             completionHandler(true)
         }
         focus.image = UIImage(systemName: "timer", withConfiguration: imgConfig)
-        focus.backgroundColor = UIColor(red: 0.180, green: 0.584, blue: 0.600, alpha: 0.9000)
+        focus.backgroundColor = #colorLiteral(red: 0.1803921569, green: 0.5843137255, blue: 0.6, alpha: 1)
         if todos[indexPath.row].dtmCompleted != nil {
             return UISwipeActionsConfiguration(actions: [delete])
         }
@@ -349,7 +354,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "FocusSegue" {
             if let vc = segue.destination as? FocusViewController {
-                vc.taskLabelText = taskText
+                vc.index = index
+                vc.taskLabelText = todos[index!].text
             }
         }
     }

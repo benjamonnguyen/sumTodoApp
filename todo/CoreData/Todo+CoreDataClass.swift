@@ -12,5 +12,20 @@ import CoreData
 
 @objc(Todo)
 public class Todo: NSManagedObject {
+    convenience init(text:String, blnStarred:Bool, dtmCreated:Date, dtmCompleted:Date?, dtmDue:Date?, entity: NSEntityDescription, context: NSManagedObjectContext) {
+        self.init(entity: entity, insertInto: context)
+        self.text = text
+        self.blnStarred = blnStarred
+        self.dtmCreated = dtmCreated
+        self.dtmCompleted = dtmCompleted
+        self.dtmDue = dtmDue
+    }
     
+    func archive(entity: NSEntityDescription, context: NSManagedObjectContext) {
+        DispatchQueue.main.async {
+            ArchivedTodo(text: self.text!, blnStarred: self.blnStarred, dtmCreated: self.dtmCreated!, dtmCompleted: self.dtmCompleted, dtmDue: self.dtmDue, entity: entity, context: context)
+            context.delete(self)
+            try! context.save()
+        }
+    }
 }

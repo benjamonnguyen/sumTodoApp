@@ -61,18 +61,19 @@
                     <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <state key="normal" backgroundImage="minus" catalog="system"/>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hy8-I8-Mcz">
-                    <rect key="frame" x="83.5" y="50.5" width="27.5" height="30.5"/>
-                    <color key="tintColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <state key="normal" image="alarm" catalog="system">
-                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large" weight="bold"/>
+                <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hy8-I8-Mcz">
+                    <rect key="frame" x="73.5" y="51.5" width="33.5" height="29"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="1"/>
+                    <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <state key="normal" image="calendar" catalog="system">
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="22" scale="large" weight="semibold"/>
                     </state>
                     <connections>
                         <action selector="toggleDue:" destination="-1" eventType="touchUpInside" id="q1P-ZP-0vq"/>
                     </connections>
                 </button>
                 <button contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLE-tm-lPe">
-                    <rect key="frame" x="353" y="50.5" width="31" height="30"/>
+                    <rect key="frame" x="358" y="51.5" width="31" height="30"/>
                     <color key="tintColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="paperplane.fill" catalog="system">
                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large" weight="bold"/>
@@ -82,7 +83,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MSk-kz-oWx">
-                    <rect key="frame" x="25" y="50.5" width="33.5" height="31"/>
+                    <rect key="frame" x="20" y="50" width="33.5" height="31"/>
                     <color key="tintColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="star" catalog="system">
                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large" weight="bold"/>
@@ -94,28 +95,28 @@
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="vLE-tm-lPe" secondAttribute="trailing" constant="30" id="0Xc-yQ-qju"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="vLE-tm-lPe" secondAttribute="trailing" constant="25" id="0Xc-yQ-qju"/>
                 <constraint firstItem="QEI-sO-hnA" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="1Of-hH-UtB"/>
-                <constraint firstItem="MSk-kz-oWx" firstAttribute="top" secondItem="NWv-gH-aCV" secondAttribute="bottom" constant="12" id="4w2-fi-EzE"/>
+                <constraint firstItem="MSk-kz-oWx" firstAttribute="top" secondItem="NWv-gH-aCV" secondAttribute="bottom" constant="11.5" id="4w2-fi-EzE"/>
                 <constraint firstItem="NWv-gH-aCV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="EyQ-WU-LMQ"/>
                 <constraint firstItem="37K-1k-rHC" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="IdM-gM-Cji"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="37K-1k-rHC" secondAttribute="trailing" id="MyN-I0-iKa"/>
                 <constraint firstItem="37K-1k-rHC" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Qtb-aD-S4E"/>
                 <constraint firstItem="NWv-gH-aCV" firstAttribute="top" secondItem="37K-1k-rHC" secondAttribute="bottom" id="Wpf-wp-eVe"/>
                 <constraint firstItem="QEI-sO-hnA" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="eBJ-vD-FRs"/>
-                <constraint firstItem="vLE-tm-lPe" firstAttribute="top" secondItem="NWv-gH-aCV" secondAttribute="bottom" constant="12" id="fAs-gb-0QK"/>
-                <constraint firstItem="hy8-I8-Mcz" firstAttribute="leading" secondItem="MSk-kz-oWx" secondAttribute="trailing" constant="25" id="fi4-pn-r2d"/>
-                <constraint firstItem="MSk-kz-oWx" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="25" id="gAz-9D-erR"/>
+                <constraint firstItem="vLE-tm-lPe" firstAttribute="top" secondItem="NWv-gH-aCV" secondAttribute="bottom" constant="13" id="fAs-gb-0QK"/>
+                <constraint firstItem="hy8-I8-Mcz" firstAttribute="leading" secondItem="MSk-kz-oWx" secondAttribute="trailing" constant="20" id="fi4-pn-r2d"/>
+                <constraint firstItem="MSk-kz-oWx" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="gAz-9D-erR"/>
                 <constraint firstAttribute="trailing" secondItem="NWv-gH-aCV" secondAttribute="trailing" constant="20" id="hy4-eu-m2r"/>
                 <constraint firstItem="NWv-gH-aCV" firstAttribute="top" secondItem="QEI-sO-hnA" secondAttribute="bottom" constant="10" id="imy-tF-G4Z"/>
-                <constraint firstItem="hy8-I8-Mcz" firstAttribute="top" secondItem="NWv-gH-aCV" secondAttribute="bottom" constant="12" id="qst-Qs-TDi"/>
+                <constraint firstItem="hy8-I8-Mcz" firstAttribute="top" secondItem="NWv-gH-aCV" secondAttribute="bottom" constant="13" id="qst-Qs-TDi"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="85.507246376811594" y="287.94642857142856"/>
         </view>
     </objects>
     <resources>
-        <image name="alarm" catalog="system" width="124" height="128"/>
+        <image name="calendar" catalog="system" width="128" height="106"/>
         <image name="minus" catalog="system" width="128" height="24"/>
         <image name="paperplane.fill" catalog="system" width="128" height="121"/>
         <image name="star" catalog="system" width="128" height="116"/>

@@ -43,7 +43,7 @@ class TodoCell:UITableViewCell {
         todoLabel.attributedText = strikethru(todo.text!, reverse: !blnCompleted)
         
         // Check box
-        checkBtn.tintColor = todo.blnStarred ? #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1) : #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+        checkBtn.tintColor = todo.blnStarred ? K.secondaryLightColor : #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: K.fontSize, weight: .semibold)
         let image = blnCompleted ? UIImage(systemName: "checkmark.square", withConfiguration: symbolConfig) : UIImage(systemName: "square", withConfiguration: symbolConfig)
         checkBtn.setImage(image, for: .normal)
