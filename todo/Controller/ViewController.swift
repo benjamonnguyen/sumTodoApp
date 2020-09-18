@@ -20,9 +20,13 @@ class ViewController: UIViewController {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var todos: [Todo] = []
-    var index:Int?
     
-    var keyboardHeight:CGFloat!
+    var activeTimer:[String:Any?] = ["todo":nil, "min":0, "sec":0,
+                                     "session":1, "strokeEnd":0,
+                                     "mode":"focus", "blnStarted": false,
+                                     "canComplete":false, "active":false]
+    
+    var keyboardHeight:CGFloat! = 0
     var todoCardVC:TodoCardViewController!
     var rescheduleVC:RescheduleViewController!
     var calendarVC:CalendarViewController!
@@ -106,11 +110,18 @@ class ViewController: UIViewController {
         todos = try! context.fetch(Todo.fetchRequest())
         for todo in todos {
             if let dtmCompleted = todo.dtmCompleted {
-                let dC = Calendar.current.startOfDay(for: dtmCompleted)
-                let today = Calendar.current.startOfDay(for: Date())
+                let dC = K.startOfDay(for: dtmCompleted)
+                let today = K.startOfDay(for: Date())
                 if dC >= today {continue}
                 DispatchQueue.main.async {
-                    todo.archive(entity: todo.entity, context: self.context)
+                    let archivedTodo = ArchivedTodo(context: self.context)
+                    archivedTodo.text = todo.text
+                    archivedTodo.blnStarred = todo.blnStarred
+                    archivedTodo.dtmCompleted = todo.dtmCompleted
+                    archivedTodo.dtmDue = todo.dtmDue
+                    archivedTodo.dtmCreated = todo.dtmCreated
+                    self.context.delete(todo)
+                    try! self.context.save()
                 }
             }
         }
@@ -144,6 +155,7 @@ class ViewController: UIViewController {
         rescheduleVC = RescheduleViewController(nibName: "RescheduleView", bundle: nil)
         self.addChild(rescheduleVC)
         view.addSubview(rescheduleVC.view)
+        rescheduleVC.view.alpha = 0
         rescheduleVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.width/2)
         rescheduleVC.view.center = view.center
         rescheduleVC.view.layer.cornerRadius = 12
@@ -152,7 +164,8 @@ class ViewController: UIViewController {
         calendarVC = CalendarViewController(nibName: "CalendarView", bundle: nil)
         self.addChild(calendarVC)
         view.addSubview(calendarVC.view)
-        calendarVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.width)
+        calendarVC.view.alpha = 0
+        calendarVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.height/1.5)
         calendarVC.view.center = view.center
         calendarVC.view.layer.cornerRadius = 12
         
@@ -182,7 +195,7 @@ class ViewController: UIViewController {
         }
     }
     
-    private func handleEditTodo() {
+    func handleEditTodo() {
         todoCardVC.todoTextView.isHidden = false
         todoCardVC.todoTextField.isHidden = true
         dimView.isHidden = false
@@ -208,6 +221,7 @@ class ViewController: UIViewController {
             todoCardVC.index = nil
         } else {
             rescheduleVC.view.isHidden = true
+            calendarVC.view.isHidden = true
         }
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.dimView.alpha = 0
@@ -243,7 +257,7 @@ class ViewController: UIViewController {
     }
     
     // MARK: @IBAction functions
-    @IBAction private func addTodo(_ sender: UIButton) {
+    @IBAction func addTodo(_ sender: Any?) {
         todoCardVC.todoTextView.isHidden = true
         todoCardVC.todoTextField.isHidden = false
         dimView.isHidden = false
@@ -266,15 +280,19 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func unwindToTodo(_ segue: UIStoryboardSegue) {
-        if segue.identifier == "TodoUnwind" {
-            let source = segue.source as! FocusViewController
-            let todo = todos[source.index]
+    @IBAction func unwindFromFocus(_ segue: UIStoryboardSegue) {
+        let source = segue.source as! FocusViewController
+        if segue.identifier == "CompleteTask" {
             DispatchQueue.main.async {
-                todo.dtmCompleted = Date()
+                source.todo.dtmCompleted = Date()
                 try! self.context.save()
                 self.fetchTodos()
             }
+        } else if segue.identifier == "ExitFocus" {
+            activeTimer = ["todo":source.todo, "min":source.minutes, "sec":source.seconds,
+                           "strokeEnd":source.strokeEnd, "session":source.currentSession,
+                           "mode":source.mode, "canComplete":source.canComplete,
+                           "blnStarted":source.blnStarted, "active":true]
         }
     }
 }
@@ -299,6 +317,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        print(todos[indexPath.row].description)
         if todos[indexPath.row].dtmCompleted != nil {
             return nil
         }
@@ -339,8 +358,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         reschedule.backgroundColor = K.secondaryLightColor
         // Focus
         let focus = UIContextualAction(style: .normal, title: "") { (action, view, completionHandler) in
-            self.index = indexPath.row
-            self.performSegue(withIdentifier: "FocusSegue", sender: nil)
+            self.performSegue(withIdentifier: "FocusSegue", sender: self.todos[indexPath.row])
             completionHandler(true)
         }
         focus.image = UIImage(systemName: "timer", withConfiguration: imgConfig)
@@ -352,10 +370,20 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "FocusSegue" {
+         if segue.identifier == "FocusSegue" {
             if let vc = segue.destination as? FocusViewController {
-                vc.index = index
-                vc.taskLabelText = todos[index!].text
+                let todo = sender as? Todo
+                vc.todo = todo
+                if todo == activeTimer["todo"] as? Todo {
+                    vc.minutes = activeTimer["min"] as! Int
+                    vc.seconds = activeTimer["sec"] as! Int
+                    vc.currentSession = activeTimer["session"] as! Int
+                    vc.mode = activeTimer["mode"] as! String
+                    vc.canComplete = activeTimer["canComplete"] as! Bool
+                    vc.strokeEnd = activeTimer["strokeEnd"] as! CGFloat
+                    vc.blnStarted = activeTimer["blnStarted"] as! Bool
+                    vc.active = activeTimer["active"] as! Bool
+                }
             }
         }
     }

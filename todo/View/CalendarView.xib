@@ -9,14 +9,17 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CalendarViewController" customModule="todo" customModuleProvider="target">
             <connections>
+                <outlet property="btnSeparatorImage" destination="iUM-vw-Gow" id="cOK-2o-l3J"/>
                 <outlet property="calendar" destination="7tN-DP-43N" id="8pF-FU-7C7"/>
                 <outlet property="calendarTable" destination="BY2-cW-uL9" id="pnS-i8-L9G"/>
+                <outlet property="cancelBtn" destination="PM0-CY-RVy" id="cjj-ns-mVD"/>
+                <outlet property="doneBtn" destination="Ie6-dh-JxQ" id="JCE-WQ-xsI"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="564" height="758"/>
+            <rect key="frame" x="0.0" y="0.0" width="564" height="703"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7tN-DP-43N" customClass="FSCalendar">
@@ -57,31 +60,51 @@
                     </userDefinedRuntimeAttributes>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BY2-cW-uL9">
-                    <rect key="frame" x="0.0" y="350" width="564" height="374"/>
+                    <rect key="frame" x="0.0" y="350" width="564" height="249"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                 </tableView>
-                <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" translatesAutoresizingMaskIntoConstraints="NO" id="oHv-k1-2WF">
-                    <rect key="frame" x="75" y="357" width="414" height="44"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oHv-k1-2WF" id="HhY-DD-e2v">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </tableViewCellContentView>
-                </tableViewCell>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PM0-CY-RVy">
+                    <rect key="frame" x="50" y="619" width="48" height="30"/>
+                    <state key="normal" title="Cancel"/>
+                    <connections>
+                        <action selector="cancel:" destination="-1" eventType="touchUpInside" id="olE-Ux-Rvg"/>
+                    </connections>
+                </button>
+                <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="minus" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="iUM-vw-Gow">
+                    <rect key="frame" x="257.5" y="630.5" width="49.5" height="6"/>
+                    <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="40" scale="large" weight="ultraLight"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ie6-dh-JxQ">
+                    <rect key="frame" x="477" y="619" width="37" height="30"/>
+                    <state key="normal" title="Done"/>
+                    <connections>
+                        <action selector="done:" destination="-1" eventType="touchUpInside" id="liX-uh-IBd"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
                 <constraint firstItem="7tN-DP-43N" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="4bc-XZ-bFT"/>
                 <constraint firstItem="BY2-cW-uL9" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="ABH-th-YvM"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="BY2-cW-uL9" secondAttribute="bottom" id="BuB-UZ-j0D"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="iUM-vw-Gow" secondAttribute="bottom" constant="12" id="InU-W9-uOG"/>
                 <constraint firstItem="BY2-cW-uL9" firstAttribute="top" secondItem="7tN-DP-43N" secondAttribute="bottom" id="RNv-u2-i35"/>
+                <constraint firstItem="iUM-vw-Gow" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Rgz-Af-qgM"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Ie6-dh-JxQ" secondAttribute="trailing" constant="50" placeholder="YES" id="UaK-vm-fIQ"/>
                 <constraint firstItem="7tN-DP-43N" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="a8a-ww-ZQz"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="BY2-cW-uL9" secondAttribute="trailing" id="i1i-uw-5K9"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Ie6-dh-JxQ" secondAttribute="bottom" constant="20" id="juN-JX-2nY"/>
+                <constraint firstItem="PM0-CY-RVy" firstAttribute="top" secondItem="BY2-cW-uL9" secondAttribute="bottom" constant="20" id="kHk-jb-PN3"/>
+                <constraint firstItem="PM0-CY-RVy" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="50" placeholder="YES" id="tfu-DV-d4Q"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="PM0-CY-RVy" secondAttribute="bottom" constant="20" id="vQS-QG-Kok"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="7tN-DP-43N" secondAttribute="trailing" id="x5k-bR-w8Q"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <point key="canvasLocation" x="240.57971014492756" y="421.20535714285711"/>
+            <point key="canvasLocation" x="240.57971014492756" y="402.79017857142856"/>
         </view>
     </objects>
+    <resources>
+        <image name="minus" catalog="system" width="128" height="24"/>
+    </resources>
 </document>

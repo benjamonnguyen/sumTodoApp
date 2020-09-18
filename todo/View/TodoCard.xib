@@ -10,10 +10,13 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TodoCardViewController" customModule="todo" customModuleProvider="target">
             <connections>
                 <outlet property="cardView" destination="i5M-Pr-FkT" id="flO-ro-tan"/>
+                <outlet property="dateLabel" destination="EbP-tc-UtG" id="u8q-22-8MQ"/>
+                <outlet property="dateStackView" destination="rfX-Ua-ltS" id="QvR-ov-gUa"/>
                 <outlet property="dueBtn" destination="hy8-I8-Mcz" id="uxH-lb-LSh"/>
                 <outlet property="handleArea" destination="37K-1k-rHC" id="vaa-Yb-wI6"/>
                 <outlet property="saveBtn" destination="vLE-tm-lPe" id="Xjm-Lm-fzu"/>
                 <outlet property="starBtn" destination="MSk-kz-oWx" id="FRe-sa-8dv"/>
+                <outlet property="timeLabel" destination="Ian-b8-gSL" id="XTm-bi-hog"/>
                 <outlet property="todoTextField" destination="ajv-xb-hNn" id="3La-AW-fXl"/>
                 <outlet property="todoTextView" destination="Uk8-w6-pk6" id="vbA-rE-umZ"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -72,7 +75,7 @@
                         <action selector="toggleDue:" destination="-1" eventType="touchUpInside" id="q1P-ZP-0vq"/>
                     </connections>
                 </button>
-                <button contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLE-tm-lPe">
+                <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLE-tm-lPe">
                     <rect key="frame" x="358" y="51.5" width="31" height="30"/>
                     <color key="tintColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="paperplane.fill" catalog="system">
@@ -92,6 +95,23 @@
                         <action selector="toggleStar:" destination="-1" eventType="touchUpInside" id="cp4-kO-x32"/>
                     </connections>
                 </button>
+                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="rfX-Ua-ltS">
+                    <rect key="frame" x="115" y="49" width="49" height="34"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-tc-UtG">
+                            <rect key="frame" x="0.0" y="0.0" width="49" height="16"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1:00 pm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ian-b8-gSL">
+                            <rect key="frame" x="0.0" y="18" width="49" height="16"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                </stackView>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
@@ -101,6 +121,7 @@
                 <constraint firstItem="NWv-gH-aCV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="EyQ-WU-LMQ"/>
                 <constraint firstItem="37K-1k-rHC" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="IdM-gM-Cji"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="37K-1k-rHC" secondAttribute="trailing" id="MyN-I0-iKa"/>
+                <constraint firstItem="rfX-Ua-ltS" firstAttribute="leading" secondItem="hy8-I8-Mcz" secondAttribute="trailing" constant="8" id="Pgc-re-rgX"/>
                 <constraint firstItem="37K-1k-rHC" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Qtb-aD-S4E"/>
                 <constraint firstItem="NWv-gH-aCV" firstAttribute="top" secondItem="37K-1k-rHC" secondAttribute="bottom" id="Wpf-wp-eVe"/>
                 <constraint firstItem="QEI-sO-hnA" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="eBJ-vD-FRs"/>

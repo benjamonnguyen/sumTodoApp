@@ -20,12 +20,4 @@ public class Todo: NSManagedObject {
         self.dtmCompleted = dtmCompleted
         self.dtmDue = dtmDue
     }
-    
-    func archive(entity: NSEntityDescription, context: NSManagedObjectContext) {
-        DispatchQueue.main.async {
-            ArchivedTodo(text: self.text!, blnStarred: self.blnStarred, dtmCreated: self.dtmCreated!, dtmCompleted: self.dtmCompleted, dtmDue: self.dtmDue, entity: entity, context: context)
-            context.delete(self)
-            try! context.save()
-        }
-    }
 }

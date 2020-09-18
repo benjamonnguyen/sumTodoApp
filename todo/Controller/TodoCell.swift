@@ -40,7 +40,7 @@ class TodoCell:UITableViewCell {
     
     func setupCell(_ todo:Todo) {
         let blnCompleted = todo.dtmCompleted != nil
-        todoLabel.attributedText = strikethru(todo.text!, reverse: !blnCompleted)
+        todoLabel.attributedText = strikethru(todo.text ?? "", reverse: !blnCompleted)
         
         // Check box
         checkBtn.tintColor = todo.blnStarred ? K.secondaryLightColor : #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
@@ -56,12 +56,12 @@ class TodoCell:UITableViewCell {
             dateFormatter.dateFormat = "MMM dd"
             var date = dateFormatter.string(from: dtmDue)
             if date == dateFormatter.string(from: Date()) {
-                dateFormatter.dateFormat = "h:mma"
+                dateFormatter.dateFormat = "h:mm a"
                 date = dateFormatter.string(from: dtmDue)
             }
             dateLabel.text = date
             dateLabel.textColor = dtmDue < Date() &&
-                dtmDue.timeIntervalSinceNow < -86400 ? #colorLiteral(red: 0.7959826631, green: 0.09189335398, blue: 0.002260176236, alpha: 1) : #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+                dtmDue.timeIntervalSinceNow < -86400 ? K.red : #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         } else {
             dateLabel.text = ""
         }

@@ -211,13 +211,14 @@
                                 </state>
                                 <connections>
                                     <action selector="exitFocus:" destination="EgU-FF-3hT" eventType="touchUpInside" id="SMk-Jt-Kft"/>
+                                    <segue destination="zot-2M-CWg" kind="unwind" identifier="ExitFocus" unwindAction="unwindFromFocus:" id="aib-UE-NUM"/>
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="856-6T-DGI">
-                                <rect key="frame" x="175" y="236" width="64.5" height="24"/>
+                                <rect key="frame" x="189" y="236" width="36.5" height="24"/>
                                 <subviews>
-                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v7R-u8-CpM" userLabel="Check Btn">
-                                        <rect key="frame" x="0.0" y="0.0" width="20" height="24"/>
+                                    <button hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v7R-u8-CpM" userLabel="Check Btn">
+                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="24"/>
                                         <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="square" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="17" scale="medium" weight="semibold"/>
@@ -227,12 +228,15 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="task" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e2R-mR-8uL">
-                                        <rect key="frame" x="28" y="0.0" width="36.5" height="24"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="36.5" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="XmW-nX-h3q" userLabel="Sessions Stack View">
+                                <rect key="frame" x="197" y="638" width="20" height="20"/>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -240,14 +244,18 @@
                             <constraint firstItem="AT6-QG-pc1" firstAttribute="trailing" secondItem="mMo-Sd-h8p" secondAttribute="trailing" constant="125" id="2W1-u3-Jgc"/>
                             <constraint firstItem="6O7-qE-IE9" firstAttribute="top" secondItem="dLD-7v-uPP" secondAttribute="bottom" constant="10" id="5k1-ju-tmg"/>
                             <constraint firstItem="mMo-Sd-h8p" firstAttribute="leading" secondItem="AT6-QG-pc1" secondAttribute="leading" constant="125" id="BoV-4C-dky"/>
+                            <constraint firstItem="AT6-QG-pc1" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="XmW-nX-h3q" secondAttribute="trailing" constant="100" id="Dbp-Jd-N9M"/>
+                            <constraint firstItem="dLD-7v-uPP" firstAttribute="top" secondItem="XmW-nX-h3q" secondAttribute="bottom" constant="35" id="FJo-oC-sKI"/>
                             <constraint firstItem="856-6T-DGI" firstAttribute="centerX" secondItem="BuB-9C-os2" secondAttribute="centerX" id="HcS-Xi-tfh"/>
                             <constraint firstItem="p8p-nK-MXc" firstAttribute="centerX" secondItem="BuB-9C-os2" secondAttribute="centerX" id="IlQ-7U-U7C"/>
+                            <constraint firstItem="XmW-nX-h3q" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="AT6-QG-pc1" secondAttribute="leading" constant="100" id="OsQ-ie-0lk"/>
                             <constraint firstItem="mMo-Sd-h8p" firstAttribute="top" secondItem="856-6T-DGI" secondAttribute="bottom" constant="80" id="Pr2-kj-mk6"/>
                             <constraint firstItem="dLD-7v-uPP" firstAttribute="centerX" secondItem="BuB-9C-os2" secondAttribute="centerX" id="R47-0H-y7M"/>
                             <constraint firstItem="KTc-mu-4er" firstAttribute="top" secondItem="AT6-QG-pc1" secondAttribute="top" constant="15" id="XsT-tY-Xf5"/>
                             <constraint firstItem="AT6-QG-pc1" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="856-6T-DGI" secondAttribute="trailing" constant="100" id="YRl-vb-vKr"/>
                             <constraint firstItem="6O7-qE-IE9" firstAttribute="centerX" secondItem="BuB-9C-os2" secondAttribute="centerX" id="bb6-UW-q08"/>
                             <constraint firstItem="856-6T-DGI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="AT6-QG-pc1" secondAttribute="leading" constant="100" id="h3J-yY-6ii"/>
+                            <constraint firstItem="XmW-nX-h3q" firstAttribute="centerX" secondItem="BuB-9C-os2" secondAttribute="centerX" id="iPD-m6-h0m"/>
                             <constraint firstItem="p8p-nK-MXc" firstAttribute="centerY" secondItem="BuB-9C-os2" secondAttribute="centerY" id="itj-FO-PA4"/>
                             <constraint firstItem="mMo-Sd-h8p" firstAttribute="centerY" secondItem="BuB-9C-os2" secondAttribute="centerY" id="ltk-Ls-gfC"/>
                             <constraint firstItem="mMo-Sd-h8p" firstAttribute="centerX" secondItem="BuB-9C-os2" secondAttribute="centerX" id="oBc-on-4Q5"/>
@@ -267,9 +275,10 @@
                         <outlet property="primaryBtn" destination="dLD-7v-uPP" id="R9P-N9-yF5"/>
                         <outlet property="secondaryBtn" destination="6O7-qE-IE9" id="Sm4-QZ-z2C"/>
                         <outlet property="secondsLabel" destination="nni-IK-vNp" id="vHT-5I-bed"/>
+                        <outlet property="sessionsStackView" destination="XmW-nX-h3q" id="hzy-HL-dlU"/>
                         <outlet property="taskLabel" destination="e2R-mR-8uL" id="Ug0-9v-nrA"/>
                         <outlet property="timerView" destination="p8p-nK-MXc" id="9GK-iP-PPI"/>
-                        <segue destination="zot-2M-CWg" kind="unwind" identifier="TodoUnwind" unwindAction="unwindToTodo:" id="6pI-Yq-NIG"/>
+                        <segue destination="zot-2M-CWg" kind="unwind" identifier="CompleteTask" unwindAction="unwindFromFocus:" id="6pI-Yq-NIG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nni-G2-CeK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
