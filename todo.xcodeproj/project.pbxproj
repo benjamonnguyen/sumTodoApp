@@ -19,6 +19,8 @@
 		B16233D1250EC2AC00AB1F32 /* CalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B16233CF250EC2AC00AB1F32 /* CalendarView.xib */; };
 		B16233D42510641E00AB1F32 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16233D22510641E00AB1F32 /* CalendarCell.swift */; };
 		B16233D52510641E00AB1F32 /* CalendarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B16233D32510641E00AB1F32 /* CalendarCell.xib */; };
+		B1B0AAB325155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0AAB125155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift */; };
+		B1B0AAB425155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0AAB225155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift */; };
 		B1D37156250122B60075C5E7 /* TodoCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D37154250122B60075C5E7 /* TodoCardViewController.swift */; };
 		B1D37157250122B60075C5E7 /* TodoCard.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1D37155250122B60075C5E7 /* TodoCard.xib */; };
 		B1F5467F24FC863A00A24F16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F5467E24FC863A00A24F16 /* AppDelegate.swift */; };
@@ -47,6 +49,8 @@
 		B16233CF250EC2AC00AB1F32 /* CalendarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarView.xib; sourceTree = "<group>"; };
 		B16233D22510641E00AB1F32 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		B16233D32510641E00AB1F32 /* CalendarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarCell.xib; sourceTree = "<group>"; };
+		B1B0AAB125155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivedTodo+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		B1B0AAB225155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivedTodo+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		B1D37154250122B60075C5E7 /* TodoCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCardViewController.swift; sourceTree = "<group>"; };
 		B1D37155250122B60075C5E7 /* TodoCard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TodoCard.xib; sourceTree = "<group>"; };
 		B1F5467B24FC863A00A24F16 /* todo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = todo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -127,6 +131,8 @@
 		B16233C1250DEF8500AB1F32 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				B1B0AAB125155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift */,
+				B1B0AAB225155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift */,
 				B14D44E924FF500D000B4DAE /* Todo+CoreDataClass.swift */,
 				B14D44EA24FF500D000B4DAE /* Todo+CoreDataProperties.swift */,
 			);
@@ -290,6 +296,7 @@
 			files = (
 				B16233D0250EC2AC00AB1F32 /* CalendarViewController.swift in Sources */,
 				B14D44EC24FF500D000B4DAE /* Todo+CoreDataProperties.swift in Sources */,
+				B1B0AAB325155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift in Sources */,
 				B16233BC250D52A700AB1F32 /* Constants.swift in Sources */,
 				B1D37156250122B60075C5E7 /* TodoCardViewController.swift in Sources */,
 				B14D44EB24FF500D000B4DAE /* Todo+CoreDataClass.swift in Sources */,
@@ -300,6 +307,7 @@
 				B1F5468924FC863A00A24F16 /* todo.xcdatamodeld in Sources */,
 				B13427F4250930FB00A58C25 /* FocusViewController.swift in Sources */,
 				B16233D42510641E00AB1F32 /* CalendarCell.swift in Sources */,
+				B1B0AAB425155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift in Sources */,
 				B11E020D25089CF8009566F0 /* TodoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

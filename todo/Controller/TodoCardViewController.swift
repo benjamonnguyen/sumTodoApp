@@ -54,8 +54,8 @@ class TodoCardViewController: UIViewController {
                 self.dueBtn.tintColor = K.secondaryLightColor
                 if let date = self.par.calendarVC.dtmDue {
                     self.dateLabel.text = self.dateFormatter.string(from: date)
-
-                    //if blnTime isHidden = false
+                    
+                    // TODO: if blnTime isHidden = false
                     if K.startOfDay(for: date) < K.startOfDay(for: Date()) {
                     
                     }
@@ -70,6 +70,7 @@ class TodoCardViewController: UIViewController {
     }
     
     @objc private func textFieldDidChange(textField:UITextField) {
+        // FIXME: saveBtn.isEnabled
 //        saveBtn.isEnabled = todoTextField.text != "" ? true : false
     }
 
@@ -92,24 +93,23 @@ class TodoCardViewController: UIViewController {
     }
     @IBAction private func saveTodo(_ sender: Any) {
         let todo = index == nil ? Todo(context: par.context) : par.todos[index!]
-        DispatchQueue.main.async {
-            if todo.dtmCreated == nil {
-                todo.dtmCreated = Date()
-            }
-            todo.text = self.todoTextField.text! != "" ? self.todoTextField.text! : self.todoTextView.text!
-            todo.blnStarred = self.blnStarred
-            if self.blnDue {
-                todo.dtmDue = self.par.calendarVC.dtmDue
-            }
-            try! self.par.context.save()
-            self.par.fetchTodos()
-            self.par.handleDismiss()
+        if todo.dtmCreated == nil {
+            todo.dtmCreated = Date()
         }
+        todo.text = self.todoTextField.text! != "" ? self.todoTextField.text! : self.todoTextView.text!
+        todo.blnStarred = self.blnStarred
+        if self.blnDue {
+            todo.dtmDue = self.par.calendarVC.dtmDue
+        }
+        try! self.par.context.save()
+        self.par.fetchTodos()
+        self.par.handleDismiss()
     }
 }
 
 extension TodoCardViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
+        // FIXME: saveBtn.isEnabled
 //        saveBtn.isEnabled = todoTextView.text != "" && todoTextView.text != par.todos[index!].text ? true : false
     }
 }

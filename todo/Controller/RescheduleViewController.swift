@@ -53,6 +53,7 @@ class RescheduleViewController: UIViewController {
     
     @IBAction private func rescheduleToday(_ sender: UIButton) {
         reschedule(days: 0)
+        // TODO: time
         //        var todayComponents = calendar.dateComponents([.day, .month, .year, .hour, .minute], from: Date())
         //        todayComponents.hour = nil
         //        todayComponents.minute = nil

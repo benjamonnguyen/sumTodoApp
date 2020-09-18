@@ -43,7 +43,6 @@ class ViewController: UIViewController {
         
         // Core Data: Todo setup
         context.undoManager = UndoManager()
-        archiveCompleted()
         fetchTodos()
         
         // Keyboard Handler
@@ -74,55 +73,58 @@ class ViewController: UIViewController {
         setNeedsStatusBarAppearanceUpdate()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        archiveCompletedTodos()
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
     
-    // MARK: Class functions
+    // MARK: - Class functions
     func fetchTodos() {
         todos = try! context.fetch(Todo.fetchRequest())
-        DispatchQueue.main.async {
-            self.todos.sort {$0.dtmCreated! < $1.dtmCreated!}
-            self.todos.sort {
-                if $0.dtmDue != nil && $1.dtmDue == nil {return true}
-                if let zero = $0.dtmDue, let one = $1.dtmDue {return zero < one}
-                return false
-            }
-            self.todos.sort {$0.blnStarred && !$1.blnStarred}
-            self.todos.sort {
-                if $0.dtmCompleted == nil && $1.dtmCompleted != nil {return true}
-                if let zero = $0.dtmCompleted, let one = $1.dtmCompleted {return zero < one}
-                return false
-            }
-            self.todoTableView.reloadData()
-        }
-        goalCount.text = "\(max(5, todos.count))"
-        let completed = todos.filter { todo in
-            if todo.dtmCompleted != nil {
-                return true
-            }
+        self.todos.sort {$0.dtmCreated! < $1.dtmCreated!}
+        self.todos.sort {
+            if $0.dtmDue != nil && $1.dtmDue == nil {return true}
+            if let zero = $0.dtmDue, let one = $1.dtmDue {return zero < one}
             return false
         }
-        completedCount.text = "\(completed.count)"
+        self.todos.sort {$0.blnStarred && !$1.blnStarred}
+        self.todos.sort {
+            if $0.dtmCompleted == nil && $1.dtmCompleted != nil {return true}
+            if let zero = $0.dtmCompleted, let one = $1.dtmCompleted {return zero < one}
+            return false
+        }
+        self.todoTableView.reloadData()
+        DispatchQueue.main.async {
+            self.goalCount.text = "\(max(5, self.todos.count))"
+            let completed = self.todos.filter { todo in
+                if todo.dtmCompleted != nil {
+                    return true
+                }
+                return false
+            }
+            self.completedCount.text = "\(completed.count)"
+        }
     }
     
-    private func archiveCompleted() {
+    private func archiveCompletedTodos() {
         todos = try! context.fetch(Todo.fetchRequest())
         for todo in todos {
             if let dtmCompleted = todo.dtmCompleted {
                 let dC = K.startOfDay(for: dtmCompleted)
                 let today = K.startOfDay(for: Date())
                 if dC >= today {continue}
-                DispatchQueue.main.async {
-                    let archivedTodo = ArchivedTodo(context: self.context)
-                    archivedTodo.text = todo.text
-                    archivedTodo.blnStarred = todo.blnStarred
-                    archivedTodo.dtmCompleted = todo.dtmCompleted
-                    archivedTodo.dtmDue = todo.dtmDue
-                    archivedTodo.dtmCreated = todo.dtmCreated
-                    self.context.delete(todo)
-                    try! self.context.save()
-                }
+                let archivedTodo = ArchivedTodo(context: context)
+                archivedTodo.text = todo.text
+                archivedTodo.blnStarred = todo.blnStarred
+                archivedTodo.dtmCompleted = dtmCompleted
+                archivedTodo.dtmDue = todo.dtmDue
+                archivedTodo.dtmCreated = todo.dtmCreated
+                self.context.delete(todo)
+                try! self.context.save()
             }
         }
     }
@@ -206,7 +208,7 @@ class ViewController: UIViewController {
         })
     }
     
-    // MARK: @objc functions
+    // MARK: - @objc functions
     @objc func handleDismiss() {
         if todoCardVC.view.frame.origin.y < view.frame.height {
             todoCardVC.todoTextField.resignFirstResponder()
@@ -249,14 +251,12 @@ class ViewController: UIViewController {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
                 self.undoDeleteBtn.frame.origin.x = -100
             })
-            DispatchQueue.main.async {
-                try! self.context.save()
-                self.fetchTodos()
-            }
+            try! self.context.save()
+            self.fetchTodos()
         }
     }
     
-    // MARK: @IBAction functions
+    // MARK: - @IBAction functions
     @IBAction func addTodo(_ sender: Any?) {
         todoCardVC.todoTextView.isHidden = true
         todoCardVC.todoTextField.isHidden = false
@@ -273,21 +273,17 @@ class ViewController: UIViewController {
          UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
             self.undoDeleteBtn.frame.origin.x = -100
         })
-        DispatchQueue.main.async {
-            self.context.undo()
-            try! self.context.save()
-            self.fetchTodos()
-        }
+        self.context.undo()
+        try! self.context.save()
+        self.fetchTodos()
     }
     
     @IBAction func unwindFromFocus(_ segue: UIStoryboardSegue) {
         let source = segue.source as! FocusViewController
         if segue.identifier == "CompleteTask" {
-            DispatchQueue.main.async {
-                source.todo.dtmCompleted = Date()
-                try! self.context.save()
-                self.fetchTodos()
-            }
+            source.todo.dtmCompleted = Date()
+            try! self.context.save()
+            self.fetchTodos()
         } else if segue.identifier == "ExitFocus" {
             activeTimer = ["todo":source.todo, "min":source.minutes, "sec":source.seconds,
                            "strokeEnd":source.strokeEnd, "session":source.currentSession,
@@ -297,7 +293,7 @@ class ViewController: UIViewController {
     }
 }
 
-// MARK: extensions
+// MARK: - Extensions
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -395,11 +391,9 @@ extension ViewController: CellDelegate {
         dismissUndo()
         if let index = todoTableView.indexPath(for: cell)?.row {
             let todo = todos[index]
-            DispatchQueue.main.async {
-                todo.dtmCompleted = todo.dtmCompleted == nil ? Date() : nil
-                try! self.context.save()
-                self.fetchTodos()
-            }
+            todo.dtmCompleted = todo.dtmCompleted == nil ? Date() : nil
+            try! self.context.save()
+            self.fetchTodos()
         }
     }
 }
@@ -412,10 +406,8 @@ class TodoTableView: UITableView {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
                 del.undoDeleteBtn.frame.origin.x = -100
             })
-            DispatchQueue.main.async {
-                try! del.context.save()
-                del.fetchTodos()
-            }
+            try! del.context.save()
+            del.fetchTodos()
         }
     }
 }

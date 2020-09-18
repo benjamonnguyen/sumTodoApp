@@ -62,7 +62,7 @@ class FocusViewController: UIViewController {
         }
     }
     
-// MARK: Class functions
+// MARK: - Class functions
     
     // MARK: Setup
     private func setupViews() {
@@ -230,7 +230,7 @@ class FocusViewController: UIViewController {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
     }
     
-    // MARK: @objc functions
+    // MARK: - @objc functions
     @objc private func countdown() {
         minutesLabel.text = minutes < 10 ? "0\(minutes)" : "\(minutes)"
         secondsLabel.text = seconds < 10 ? "0\(seconds)" : "\(seconds)"
@@ -259,7 +259,7 @@ class FocusViewController: UIViewController {
         }
     }
     
-    // MARK: @IBAction functions
+    // MARK: - @IBAction functions
     @IBAction private func pressPrimary(_ sender: UIButton) {
         if !blnStarted {
             if pausedTime == nil {startTimer()}
