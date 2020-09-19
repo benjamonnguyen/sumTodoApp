@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class FocusViewController: UIViewController {
 
@@ -21,6 +22,7 @@ class FocusViewController: UIViewController {
     @IBOutlet weak var checkBtn: UIButton!
     @IBOutlet weak var sessionsStackView: UIStackView!
     
+    let timerSpeed: CFTimeInterval = 1.0 // use to speed up timer speed for testing
     let modeToColor = ["focus":#colorLiteral(red: 0.1803921569, green: 0.5843137255, blue: 0.6, alpha: 1), "break":#colorLiteral(red: 0.3137254902, green: 0.5882352941, blue: 0.9411764706, alpha: 1), "longBreak":#colorLiteral(red: 0.3137254902, green: 0.5882352941, blue: 0.9411764706, alpha: 1)]
     var mode = "focus"
     var todo:Todo!
@@ -135,7 +137,7 @@ class FocusViewController: UIViewController {
         startAnimation(minutes:CFTimeInterval) {
         let fillAnimation = CABasicAnimation(keyPath: "strokeEnd")
         fillAnimation.toValue = 1
-        fillAnimation.duration = CFTimeInterval(seconds) + minutes*60
+        fillAnimation.duration = CFTimeInterval(seconds) + minutes*60 * timerSpeed
         fillAnimation.fillMode = .forwards
         fillAnimation.isRemovedOnCompletion = false
         progressLayer.speed = 1.0
@@ -155,7 +157,7 @@ class FocusViewController: UIViewController {
         progressLayer.beginTime = 0.0
         let timeSincePause = progressLayer.convertTime(CACurrentMediaTime(), from: nil) - pausedTime!
       progressLayer.beginTime = timeSincePause
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: timerSpeed, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
     }
     
     // MARK: Timer
@@ -173,6 +175,8 @@ class FocusViewController: UIViewController {
         }
         resetTimer(mode)
         canComplete = true
+
+        AudioServicesPlayAlertSound(SystemSoundID(1005))
     }
     
     private func resetTimer(_ fromMode:String) {
@@ -227,7 +231,7 @@ class FocusViewController: UIViewController {
         timerView.isHidden = false
         timerView.isUserInteractionEnabled = false
         startAnimation(minutes: CFTimeInterval(minutes))
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: timerSpeed, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
     }
     
     // MARK: - @objc functions

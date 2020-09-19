@@ -81,6 +81,9 @@ class TodoCardViewController: UIViewController {
         par.calendarVC.index = index
         if index != nil {
             par.calendarVC.dtmDue = par.todos[index!].dtmDue
+            par.calendarVC.text = par.todoCardVC.todoTextView.text
+        } else {
+            par.calendarVC.text = par.todoCardVC.todoTextField.text
         }
         par.handleDismiss()
         par.calendarVC.view.isHidden = false

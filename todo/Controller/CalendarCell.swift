@@ -26,4 +26,12 @@ class CalendarCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    // Adds spacing between cells
+    // FIX: clipping
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0))
+    }
 }

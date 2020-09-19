@@ -185,19 +185,17 @@ class ViewController: UIViewController {
         undoDeleteBtn.frame.origin.x = -100
     }
     
-    private func setupCard(with todos:[Todo], at index:Int) {
-        // Set up todoCard with todo's properties
+    func handleEdit(for todos:[Todo], at index:Int) {
+        // setup card properties
         let todo = todos[index]
         todoCardVC.index = index
         todoCardVC.todoTextView.text = todo.text
         todoCardVC.blnStarred = todo.blnStarred
         if todo.dtmDue != nil {
             todoCardVC.blnDue = true
-//            todoCardVC.datePicker.date = todo.dtmDue!
+//            TODO: todoCardVC.datePicker.date = todo.dtmDue!
         }
-    }
-    
-    func handleEditTodo() {
+        // setup card views
         todoCardVC.todoTextView.isHidden = false
         todoCardVC.todoTextField.isHidden = true
         dimView.isHidden = false
@@ -258,10 +256,15 @@ class ViewController: UIViewController {
     
     // MARK: - @IBAction functions
     @IBAction func addTodo(_ sender: Any?) {
-        todoCardVC.todoTextView.isHidden = true
-        todoCardVC.todoTextField.isHidden = false
-        dimView.isHidden = false
-        todoCardVC.todoTextField.placeholder = K.addTodoPhrases.randomElement()
+        DispatchQueue.main.async {
+            if let text = sender as? String {
+                self.todoCardVC.todoTextField.text = text
+            }
+            self.todoCardVC.todoTextView.isHidden = true
+            self.todoCardVC.todoTextField.isHidden = false
+            self.dimView.isHidden = false
+            self.todoCardVC.todoTextField.placeholder = K.addTodoPhrases.randomElement()
+        }
         todoCardVC.todoTextField.becomeFirstResponder()
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.todoCardVC.view.frame.origin.y = self.view.frame.height - self.keyboardHeight - self.cardHeight + 45
@@ -321,8 +324,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        setupCard(with: todos, at: indexPath.row)
-        handleEditTodo()
+        handleEdit(for: todos, at: indexPath.row)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
