@@ -9,6 +9,7 @@
     </entity>
     <entity name="Todo" representedClassName="Todo" syncable="YES">
         <attribute name="blnStarred" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="blnTime" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="dtmCompleted" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dtmCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dtmDue" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -16,6 +17,6 @@
     </entity>
     <elements>
         <element name="ArchivedTodo" positionX="-63" positionY="27" width="128" height="118"/>
-        <element name="Todo" positionX="-63" positionY="-18" width="128" height="118"/>
+        <element name="Todo" positionX="-63" positionY="-18" width="128" height="133"/>
     </elements>
 </model>

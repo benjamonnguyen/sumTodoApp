@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared().isEnabled = false
         IQKeyboardManager.shared().isEnableAutoToolbar = false
         UserDefaults.standard.register(defaults: ["focusDuration":25, "longBreakDuration":15, "breakDuration":5])
+        application.isIdleTimerDisabled = false
         return true
     }
     // MARK: UISceneSession Lifecycle

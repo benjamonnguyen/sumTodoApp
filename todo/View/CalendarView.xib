@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CalendarViewController" customModule="todo" customModuleProvider="target">
             <connections>
-                <outlet property="btnSeparatorImage" destination="iUM-vw-Gow" id="cOK-2o-l3J"/>
                 <outlet property="calendar" destination="7tN-DP-43N" id="8pF-FU-7C7"/>
                 <outlet property="calendarTable" destination="BY2-cW-uL9" id="pnS-i8-L9G"/>
                 <outlet property="cancelBtn" destination="PM0-CY-RVy" id="cjj-ns-mVD"/>
+                <outlet property="clearBtn" destination="oI8-tm-gvy" id="3PJ-3u-PpD"/>
                 <outlet property="doneBtn" destination="Ie6-dh-JxQ" id="JCE-WQ-xsI"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -23,8 +25,8 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7tN-DP-43N" customClass="FSCalendar">
-                    <rect key="frame" x="0.0" y="0.0" width="564" height="350"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <rect key="frame" x="0.0" y="38" width="564" height="350"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="350" id="XOB-a9-KRr"/>
                     </constraints>
@@ -59,39 +61,45 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BY2-cW-uL9">
-                    <rect key="frame" x="0.0" y="350" width="564" height="249"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="BY2-cW-uL9">
+                    <rect key="frame" x="0.0" y="388" width="564" height="208"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PM0-CY-RVy">
-                    <rect key="frame" x="50" y="619" width="48" height="30"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PM0-CY-RVy">
+                    <rect key="frame" x="50" y="616" width="53" height="33"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <state key="normal" title="Cancel"/>
                     <connections>
                         <action selector="cancel:" destination="-1" eventType="touchUpInside" id="olE-Ux-Rvg"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="minus" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="iUM-vw-Gow">
-                    <rect key="frame" x="257.5" y="630.5" width="49.5" height="6"/>
-                    <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="40" scale="large" weight="ultraLight"/>
-                </imageView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ie6-dh-JxQ">
-                    <rect key="frame" x="477" y="619" width="37" height="30"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ie6-dh-JxQ">
+                    <rect key="frame" x="473" y="616" width="41" height="33"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <state key="normal" title="Done"/>
                     <connections>
                         <action selector="done:" destination="-1" eventType="touchUpInside" id="liX-uh-IBd"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oI8-tm-gvy">
+                    <rect key="frame" x="20" y="5" width="40" height="33"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <state key="normal" title="Clear"/>
+                    <connections>
+                        <action selector="clear:" destination="-1" eventType="touchUpInside" id="cXK-Fy-KRm"/>
+                    </connections>
+                </button>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="7tN-DP-43N" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="4bc-XZ-bFT"/>
                 <constraint firstItem="BY2-cW-uL9" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="ABH-th-YvM"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="iUM-vw-Gow" secondAttribute="bottom" constant="12" id="InU-W9-uOG"/>
+                <constraint firstItem="oI8-tm-gvy" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="PT8-5S-xSi"/>
                 <constraint firstItem="BY2-cW-uL9" firstAttribute="top" secondItem="7tN-DP-43N" secondAttribute="bottom" id="RNv-u2-i35"/>
-                <constraint firstItem="iUM-vw-Gow" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Rgz-Af-qgM"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Ie6-dh-JxQ" secondAttribute="trailing" constant="50" placeholder="YES" id="UaK-vm-fIQ"/>
-                <constraint firstItem="7tN-DP-43N" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="a8a-ww-ZQz"/>
+                <constraint firstItem="7tN-DP-43N" firstAttribute="top" secondItem="oI8-tm-gvy" secondAttribute="bottom" id="a8a-ww-ZQz"/>
+                <constraint firstItem="oI8-tm-gvy" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="5" id="eH5-Ig-kTM"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="BY2-cW-uL9" secondAttribute="trailing" id="i1i-uw-5K9"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Ie6-dh-JxQ" secondAttribute="bottom" constant="20" id="juN-JX-2nY"/>
                 <constraint firstItem="PM0-CY-RVy" firstAttribute="top" secondItem="BY2-cW-uL9" secondAttribute="bottom" constant="20" id="kHk-jb-PN3"/>
@@ -100,11 +108,12 @@
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="7tN-DP-43N" secondAttribute="trailing" id="x5k-bR-w8Q"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="240.57971014492756" y="402.79017857142856"/>
         </view>
     </objects>
     <resources>
-        <image name="minus" catalog="system" width="128" height="24"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

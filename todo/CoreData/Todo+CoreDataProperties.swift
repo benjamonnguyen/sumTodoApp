@@ -22,4 +22,6 @@ extension Todo {
     @NSManaged public var dtmCompleted: Date?
     @NSManaged public var dtmDue: Date?
     @NSManaged public var blnStarred: Bool
+    @NSManaged public var blnTime: Bool
+    
 }

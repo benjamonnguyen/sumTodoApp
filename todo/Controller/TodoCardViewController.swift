@@ -23,11 +23,10 @@ class TodoCardViewController: UIViewController {
     @IBOutlet weak var timeLabel: UILabel!
     
     var blnStarred = false
-    var blnDue = false
-    var index: Int?
+    var blnTime = false
+    var dtmDue:Date? = nil
+    var todo:Todo?
     var par:ViewController!
-    let dateFormatter = DateFormatter()
-    let timeFormatter = DateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,30 +35,34 @@ class TodoCardViewController: UIViewController {
         todoTextView.font = UIFont.systemFont(ofSize: K.fontSize)
         todoTextField.font = UIFont.systemFont(ofSize: K.fontSize)
         todoTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        timeFormatter.amSymbol = "am"
-        timeFormatter.pmSymbol = "pm"
-        timeFormatter.dateFormat = "h:mm a"
-        dateFormatter.dateFormat = "MMM dd"
         dateStackView.centerYAnchor.constraint(equalTo: dueBtn.centerYAnchor).isActive = true
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+    }
+    
+    func refreshCard() {
         DispatchQueue.main.async {
             let starImage = self.blnStarred ? UIImage(systemName: "star.fill") : UIImage(systemName: "star")
             self.starBtn.setImage(starImage, for: .normal)
-            if self.blnDue {
+            if self.dtmDue != nil {
+                if self.blnTime {self.timeLabel.isHidden = false}
                 self.dateLabel.isHidden = false
                 self.dueBtn.tintColor = K.secondaryLightColor
-                if let date = self.par.calendarVC.dtmDue {
-                    self.dateLabel.text = self.dateFormatter.string(from: date)
-                    
-                    // TODO: if blnTime isHidden = false
-                    if K.startOfDay(for: date) < K.startOfDay(for: Date()) {
-                    
+                if let date = self.dtmDue {
+                    self.dateLabel.text = F.dateFormatter.string(from: date)
+                    if self.blnTime {
+                        self.timeLabel.text = F.timeFormatter.string(from: date)
                     }
-                    self.dateLabel.textColor = K.startOfDay(for: date) < K.startOfDay(for: Date()) ? K.red : K.lightGray
+                    let overdue = F.startOfDay(for: date) < F.startOfDay(for: Date())
+                    if overdue {
+                        self.dateLabel.textColor = K.red
+                        self.timeLabel.textColor = K.red
+                    } else {
+                        self.dateLabel.textColor = K.lightGray
+                        self.timeLabel.textColor = K.lightGray
+                    }
                 }
             } else {
                 self.dueBtn.tintColor = K.lightGray
@@ -67,24 +70,43 @@ class TodoCardViewController: UIViewController {
                 self.timeLabel.isHidden = true
             }
         }
+        checkForChange()
+    }
+    
+    func setupCard() {
+        if let todo = self.todo {
+            todoTextView.text = todo.text
+            blnTime = todo.blnTime
+            dtmDue = todo.dtmDue
+            blnStarred = todo.blnStarred
+        } else {
+            todoTextView.text = ""
+            todoTextField.text = ""
+            blnTime = false
+            dtmDue = nil
+            blnStarred = false
+        }
+        refreshCard()
+    }
+    
+    private func checkForChange() {
+        if let todo = self.todo {
+            if blnStarred != todo.blnStarred || blnTime != todo.blnTime ||
+                (todoTextView.text != todo.text && todoTextView.text != "") ||
+                dtmDue != todo.dtmDue {saveBtn.isEnabled = true}
+            else {saveBtn.isEnabled = false}
+        } else {saveBtn.isEnabled = todoTextField.text != "" ? true : false}
     }
     
     @objc private func textFieldDidChange(textField:UITextField) {
-        // FIXME: saveBtn.isEnabled
-//        saveBtn.isEnabled = todoTextField.text != "" ? true : false
+        checkForChange()
     }
 
     @IBAction private func toggleStar(_ sender: UIButton) {
         blnStarred = !blnStarred
+        refreshCard()
     }
-    @IBAction private func toggleDue(_ sender: UIButton) {
-        par.calendarVC.index = index
-        if index != nil {
-            par.calendarVC.dtmDue = par.todos[index!].dtmDue
-            par.calendarVC.text = par.todoCardVC.todoTextView.text
-        } else {
-            par.calendarVC.text = par.todoCardVC.todoTextField.text
-        }
+    @IBAction private func toggleCalendar(_ sender: UIButton) {
         par.handleDismiss()
         par.calendarVC.view.isHidden = false
         par.dimView.isHidden = false
@@ -92,27 +114,27 @@ class TodoCardViewController: UIViewController {
             self.par.dimView.alpha = 1
             self.par.calendarVC.view.alpha = 1
         })
-        par.calendarVC.setupCalendar()
+        par.calendarVC.calendar.select(dtmDue ?? Date())
+        par.calendarVC.timeComponents = blnTime ? Calendar.current.dateComponents([.hour, .minute], from: dtmDue!) : nil
+        par.calendarVC.calendarTable.reloadData()
     }
+    
     @IBAction private func saveTodo(_ sender: Any) {
-        let todo = index == nil ? Todo(context: par.context) : par.todos[index!]
-        if todo.dtmCreated == nil {
-            todo.dtmCreated = Date()
-        }
-        todo.text = self.todoTextField.text! != "" ? self.todoTextField.text! : self.todoTextView.text!
-        todo.blnStarred = self.blnStarred
-        if self.blnDue {
-            todo.dtmDue = self.par.calendarVC.dtmDue
-        }
-        try! self.par.context.save()
-        self.par.fetchTodos()
-        self.par.handleDismiss()
+        let todo = self.todo == nil ? Todo(context: par.context) : self.todo!
+        if todo.dtmCreated == nil {todo.dtmCreated = Date()}
+        todo.text = todoTextField.text! != "" ? todoTextField.text! : todoTextView.text!
+        todo.blnStarred = blnStarred
+        todo.dtmDue = dtmDue
+        todo.blnTime = blnTime
+        F.feedback(.soft)
+        try! par.context.save()
+        par.fetchTodos()
+        par.handleDismiss()
     }
 }
 
 extension TodoCardViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        // FIXME: saveBtn.isEnabled
-//        saveBtn.isEnabled = todoTextView.text != "" && todoTextView.text != par.todos[index!].text ? true : false
+        checkForChange()
     }
 }

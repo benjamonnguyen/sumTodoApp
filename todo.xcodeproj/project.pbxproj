@@ -21,6 +21,11 @@
 		B16233D52510641E00AB1F32 /* CalendarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B16233D32510641E00AB1F32 /* CalendarCell.xib */; };
 		B1B0AAB325155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0AAB125155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift */; };
 		B1B0AAB425155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0AAB225155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift */; };
+		B1B0AACA2516DA5500F7EFA3 /* TimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0AAC82516DA5500F7EFA3 /* TimeViewController.swift */; };
+		B1B0AACB2516DA5500F7EFA3 /* TimeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1B0AAC92516DA5500F7EFA3 /* TimeView.xib */; };
+		B1B0AAD6251992DD00F7EFA3 /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = B1B0AAD5251992DC00F7EFA3 /* ding.wav */; };
+		B1B0AAD925199B4500F7EFA3 /* completeDing.wav in Resources */ = {isa = PBXBuildFile; fileRef = B1B0AAD825199B4500F7EFA3 /* completeDing.wav */; };
+		B1B0AADC251A9D9000F7EFA3 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0AADB251A9D9000F7EFA3 /* Functions.swift */; };
 		B1D37156250122B60075C5E7 /* TodoCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D37154250122B60075C5E7 /* TodoCardViewController.swift */; };
 		B1D37157250122B60075C5E7 /* TodoCard.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1D37155250122B60075C5E7 /* TodoCard.xib */; };
 		B1F5467F24FC863A00A24F16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F5467E24FC863A00A24F16 /* AppDelegate.swift */; };
@@ -51,6 +56,11 @@
 		B16233D32510641E00AB1F32 /* CalendarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarCell.xib; sourceTree = "<group>"; };
 		B1B0AAB125155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivedTodo+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		B1B0AAB225155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivedTodo+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		B1B0AAC82516DA5500F7EFA3 /* TimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeViewController.swift; sourceTree = "<group>"; };
+		B1B0AAC92516DA5500F7EFA3 /* TimeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimeView.xib; sourceTree = "<group>"; };
+		B1B0AAD5251992DC00F7EFA3 /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
+		B1B0AAD825199B4500F7EFA3 /* completeDing.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = completeDing.wav; sourceTree = "<group>"; };
+		B1B0AADB251A9D9000F7EFA3 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		B1D37154250122B60075C5E7 /* TodoCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCardViewController.swift; sourceTree = "<group>"; };
 		B1D37155250122B60075C5E7 /* TodoCard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TodoCard.xib; sourceTree = "<group>"; };
 		B1F5467B24FC863A00A24F16 /* todo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = todo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				B16233BB250D52A700AB1F32 /* Constants.swift */,
+				B1B0AADB251A9D9000F7EFA3 /* Functions.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -111,6 +122,7 @@
 				B13427F8250A728700A58C25 /* RescheduleViewController.swift */,
 				B16233CE250EC2AC00AB1F32 /* CalendarViewController.swift */,
 				B16233D22510641E00AB1F32 /* CalendarCell.swift */,
+				B1B0AAC82516DA5500F7EFA3 /* TimeViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -124,6 +136,7 @@
 				B13427F9250A728700A58C25 /* RescheduleView.xib */,
 				B16233CF250EC2AC00AB1F32 /* CalendarView.xib */,
 				B16233D32510641E00AB1F32 /* CalendarCell.xib */,
+				B1B0AAC92516DA5500F7EFA3 /* TimeView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -137,6 +150,15 @@
 				B14D44EA24FF500D000B4DAE /* Todo+CoreDataProperties.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		B1B0AAD4251992B400F7EFA3 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				B1B0AAD825199B4500F7EFA3 /* completeDing.wav */,
+				B1B0AAD5251992DC00F7EFA3 /* ding.wav */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		B1F5467224FC863A00A24F16 = {
@@ -166,6 +188,7 @@
 				B14D44EE24FF50A9000B4DAE /* Controller */,
 				B14D44EF24FF50B2000B4DAE /* View */,
 				B16233C1250DEF8500AB1F32 /* CoreData */,
+				B1B0AAD4251992B400F7EFA3 /* Assets */,
 				B1F5468A24FC864200A24F16 /* Assets.xcassets */,
 				B1F5468C24FC864200A24F16 /* LaunchScreen.storyboard */,
 				B1F5468F24FC864200A24F16 /* Info.plist */,
@@ -203,7 +226,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1160;
-				LastUpgradeCheck = 1160;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Benjamin Nguyen";
 				TargetAttributes = {
 					B1F5467A24FC863A00A24F16 = {
@@ -234,10 +257,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1B0AAD6251992DD00F7EFA3 /* ding.wav in Resources */,
 				B1F5468E24FC864200A24F16 /* LaunchScreen.storyboard in Resources */,
 				B1F5468B24FC864200A24F16 /* Assets.xcassets in Resources */,
 				B1D37157250122B60075C5E7 /* TodoCard.xib in Resources */,
 				B16233D52510641E00AB1F32 /* CalendarCell.xib in Resources */,
+				B1B0AAD925199B4500F7EFA3 /* completeDing.wav in Resources */,
+				B1B0AACB2516DA5500F7EFA3 /* TimeView.xib in Resources */,
 				B11E020E25089CF8009566F0 /* TodoCell.xib in Resources */,
 				B13427FB250A728700A58C25 /* RescheduleView.xib in Resources */,
 				B1F5468624FC863A00A24F16 /* Main.storyboard in Resources */,
@@ -295,6 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B16233D0250EC2AC00AB1F32 /* CalendarViewController.swift in Sources */,
+				B1B0AACA2516DA5500F7EFA3 /* TimeViewController.swift in Sources */,
 				B14D44EC24FF500D000B4DAE /* Todo+CoreDataProperties.swift in Sources */,
 				B1B0AAB325155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift in Sources */,
 				B16233BC250D52A700AB1F32 /* Constants.swift in Sources */,
@@ -304,6 +331,7 @@
 				B1F5467F24FC863A00A24F16 /* AppDelegate.swift in Sources */,
 				B1F5468124FC863A00A24F16 /* SceneDelegate.swift in Sources */,
 				B13427FA250A728700A58C25 /* RescheduleViewController.swift in Sources */,
+				B1B0AADC251A9D9000F7EFA3 /* Functions.swift in Sources */,
 				B1F5468924FC863A00A24F16 /* todo.xcdatamodeld in Sources */,
 				B13427F4250930FB00A58C25 /* FocusViewController.swift in Sources */,
 				B16233D42510641E00AB1F32 /* CalendarCell.swift in Sources */,
@@ -360,6 +388,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -384,7 +413,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -420,6 +449,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -438,7 +468,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -464,7 +494,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.sum.todo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -484,7 +514,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.sum.todo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

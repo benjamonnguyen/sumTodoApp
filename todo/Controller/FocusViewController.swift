@@ -22,35 +22,41 @@ class FocusViewController: UIViewController {
     @IBOutlet weak var checkBtn: UIButton!
     @IBOutlet weak var sessionsStackView: UIStackView!
     
-    let timerSpeed: CFTimeInterval = 1.0 // use to speed up timer speed for testing
-    let modeToColor = ["focus":#colorLiteral(red: 0.1803921569, green: 0.5843137255, blue: 0.6, alpha: 1), "break":#colorLiteral(red: 0.3137254902, green: 0.5882352941, blue: 0.9411764706, alpha: 1), "longBreak":#colorLiteral(red: 0.3137254902, green: 0.5882352941, blue: 0.9411764706, alpha: 1)]
+    private let timerSpeed: CFTimeInterval = 1.0 // use to speed up timer speed for testing
+    private let modeToColor = ["focus":#colorLiteral(red: 0.1803921569, green: 0.5843137255, blue: 0.6, alpha: 1), "break":#colorLiteral(red: 0.3137254902, green: 0.5882352941, blue: 0.9411764706, alpha: 1), "longBreak":#colorLiteral(red: 0.3137254902, green: 0.5882352941, blue: 0.9411764706, alpha: 1)]
     var mode = "focus"
     var todo:Todo!
     var canComplete = false
     var blnStarted = false
     var active = false
-    var totalSessions = 4
+    private var totalSessions = 4
     var currentSession = 1
     
-    var progressLayer = CAShapeLayer()
+    private var progressLayer = CAShapeLayer()
     var strokeEnd:CGFloat = 0
     var timer:Timer!
     var minutes:Int = UserDefaults.standard.integer(forKey: "focusDuration")
     var seconds:Int = 0
-    var pausedTime:CFTimeInterval?
-    var durations = Array(stride(from: 5, through: 60, by: 5))
+    private var pausedTime:CFTimeInterval?
+    private var durations = Array(stride(from: 5, through: 60, by: 5))
     
-    var fontSize:CGFloat!
-    var font:UIFont!
+    private var fontSize:CGFloat!
+    private var font:UIFont!
+    private var idleTimer:Timer?
+    private var idleTime:TimeInterval! = 30
+    private var dimView:UIView!
+    
+    override func loadView() {
+        super.loadView()
+        setupViews()
+        setupTimer()
+        view.bringSubviewToFront(dimView)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         durationPicker.delegate = self
         durationPicker.dataSource = self
-        DispatchQueue.main.async {
-            self.setupViews()
-            self.setupTimer()
-        }
         if blnStarted {startTimer()}
     }
     
@@ -64,10 +70,22 @@ class FocusViewController: UIViewController {
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if idleTimer != nil {resetIdleTimer()}
+        else {undimScreen()}
+    }
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
+    }
+    
 // MARK: - Class functions
     
     // MARK: Setup
     private func setupViews() {
+        dimView = F.setupDimView(for: self, with: #selector(undimScreen))
+        dimView.backgroundColor = UIColor(white: 0, alpha: 0.8)
+        
         taskLabel.text = todo.text
         durationPicker.selectRow(minutes/5-1, inComponent: 0, animated: false)
         durationPicker.isHidden = true
@@ -130,6 +148,25 @@ class FocusViewController: UIViewController {
         
         view.layer.addSublayer(timerLayer)
         view.layer.addSublayer(progressLayer)
+    }
+    
+    // MARK: Idle Timer
+    private func resetIdleTimer() {
+        if idleTimer != nil {idleTimer!.invalidate()}
+        idleTimer = Timer.scheduledTimer(timeInterval: idleTime, target: self, selector: #selector(dimScreen), userInfo: nil, repeats: false)
+    }
+    @objc private func dimScreen() {
+        dimView.isHidden = false
+        dimView.gestureRecognizers?.first?.cancelsTouchesInView = false
+        UIView.animate(withDuration: 0.5) {
+            self.dimView.alpha = 1
+        }
+    }
+    @objc private func undimScreen() {
+        UIView.animate(withDuration: 0.5) {
+            self.dimView.alpha = 0
+        }
+        dimView.isHidden = true
     }
     
     // MARK: Timer Animation
@@ -232,9 +269,10 @@ class FocusViewController: UIViewController {
         timerView.isUserInteractionEnabled = false
         startAnimation(minutes: CFTimeInterval(minutes))
         timer = Timer.scheduledTimer(timeInterval: timerSpeed, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
+        UIApplication.shared.isIdleTimerDisabled = true
+        resetIdleTimer()
     }
     
-    // MARK: - @objc functions
     @objc private func countdown() {
         minutesLabel.text = minutes < 10 ? "0\(minutes)" : "\(minutes)"
         secondsLabel.text = seconds < 10 ? "0\(seconds)" : "\(seconds)"
@@ -250,6 +288,7 @@ class FocusViewController: UIViewController {
         }
     }
     
+    // MARK: - @objc functions
     @objc private func changeDuration() {
         timerView.isHidden = true
         durationPicker.isHidden = false

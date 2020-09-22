@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,7 +18,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Todo text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e7L-lA-SbQ">
-                        <rect key="frame" x="49" y="12" width="221" height="21"/>
+                        <rect key="frame" x="49" y="12" width="196" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -35,8 +36,11 @@
                             <action selector="checkTodo:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="q7l-Oe-hbN"/>
                         </connections>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IX2-W3-kf3">
-                        <rect key="frame" x="281" y="14" width="29" height="16"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Sept 30" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IX2-W3-kf3">
+                        <rect key="frame" x="250" y="14" width="60" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="8Ah-6q-iIs"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -50,7 +54,7 @@
                     <constraint firstAttribute="bottom" secondItem="e7L-lA-SbQ" secondAttribute="bottom" constant="11" id="XGa-cH-s7C"/>
                     <constraint firstItem="e7L-lA-SbQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="cTo-NR-RrY"/>
                     <constraint firstItem="aSx-Zc-UZj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="dAd-XJ-HtA"/>
-                    <constraint firstAttribute="trailing" secondItem="e7L-lA-SbQ" secondAttribute="trailing" constant="50" id="n5b-0F-BC2"/>
+                    <constraint firstItem="IX2-W3-kf3" firstAttribute="leading" secondItem="e7L-lA-SbQ" secondAttribute="trailing" constant="5" id="n5b-0F-BC2"/>
                     <constraint firstItem="e7L-lA-SbQ" firstAttribute="leading" secondItem="aSx-Zc-UZj" secondAttribute="trailing" constant="8" id="qEJ-mO-zrH"/>
                     <constraint firstItem="aSx-Zc-UZj" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="wy1-Te-IAY"/>
                 </constraints>

@@ -40,7 +40,6 @@ class TodoCell:UITableViewCell {
     
     func setupCell(_ todo:Todo) {
         let blnCompleted = todo.dtmCompleted != nil
-        todoLabel.attributedText = strikethru(todo.text ?? "", reverse: !blnCompleted)
         
         // Check box
         checkBtn.tintColor = todo.blnStarred ? K.secondaryLightColor : #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
@@ -49,31 +48,26 @@ class TodoCell:UITableViewCell {
         checkBtn.setImage(image, for: .normal)
         
         // Due Date
-        let dateFormatter = DateFormatter()
-        dateFormatter.amSymbol = "am"
-        dateFormatter.pmSymbol = "pm"
         if let dtmDue = todo.dtmDue {
-            dateFormatter.dateFormat = "MMM dd"
-            var date = dateFormatter.string(from: dtmDue)
-            if date == dateFormatter.string(from: Date()) {
-                dateFormatter.dateFormat = "h:mm a"
-                date = dateFormatter.string(from: dtmDue)
+            var date = F.dateFormatter.string(from: dtmDue)
+            dateLabel.textColor = F.startOfDay(for: dtmDue) < F.startOfDay(for: Date()) ? K.red : K.lightGray
+            if date == F.dateFormatter.string(from: Date()) {
+                if todo.blnTime {
+                    date = F.timeFormatter.string(from: dtmDue)
+                    dateLabel.textColor = dtmDue < Date() ? K.red : K.lightGray
+                } else {date = "Today"}
             }
             dateLabel.text = date
-            dateLabel.textColor = dtmDue < Date() &&
-                dtmDue.timeIntervalSinceNow < -86400 ? K.red : #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-        } else {
-            dateLabel.text = ""
-        }
+        } else {dateLabel.text = ""}
+        
+        todoLabel.attributedText = strikethru(todo.text ?? "", reverse: !blnCompleted)
         
         // Gray out if blnCompleted
         if blnCompleted {
             checkBtn.tintColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
             dateLabel.text = ""
             selectionStyle = .none
-        } else {
-            selectionStyle = .gray
-        }
+        } else {selectionStyle = .gray}
     }
     
     @IBAction private func checkTodo(_ sender: UIButton) {

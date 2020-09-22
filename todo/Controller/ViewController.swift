@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import AVFoundation
 
 class ViewController: UIViewController {
 
@@ -18,6 +19,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var completedCount: UILabel!
     @IBOutlet weak var goalCount: UILabel!
     
+    var audioPlayer = AVAudioPlayer()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var todos: [Todo] = []
     
@@ -33,9 +35,13 @@ class ViewController: UIViewController {
     var dimView:UIView!
     var cardHeight:CGFloat! = 175
     
+    override func loadView() {
+        super.loadView()
+        initSubviews()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        headerView.heightAnchor.constraint(equalToConstant: view.frame.height/8).isActive = true
         // tableView setup
         todoTableView.register(UINib(nibName: "TodoCell", bundle: nil), forCellReuseIdentifier: "TodoCell")
         todoTableView.delegate = self
@@ -59,12 +65,16 @@ class ViewController: UIViewController {
             object: nil
         )
         
-        initSubviews()
+        // Audio setup
+        let soundPath = Bundle.main.path(forResource: "completeDing", ofType: "wav")
+        let url = URL(fileURLWithPath: soundPath!)
+        audioPlayer = try! AVAudioPlayer(contentsOf: url)
+        audioPlayer.prepareToPlay()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        dismissUndo()
+        if undoDeleteBtn.frame.origin.x == -100 {dismissUndo()}
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,59 +108,42 @@ class ViewController: UIViewController {
             return false
         }
         self.todoTableView.reloadData()
+        let completed = todos.filter { todo in
+            if todo.dtmCompleted != nil {return true}
+            return false
+        }
         DispatchQueue.main.async {
             self.goalCount.text = "\(max(5, self.todos.count))"
-            let completed = self.todos.filter { todo in
-                if todo.dtmCompleted != nil {
-                    return true
-                }
-                return false
-            }
             self.completedCount.text = "\(completed.count)"
         }
     }
     
     private func archiveCompletedTodos() {
         todos = try! context.fetch(Todo.fetchRequest())
-        for todo in todos {
-            if let dtmCompleted = todo.dtmCompleted {
-                let dC = K.startOfDay(for: dtmCompleted)
-                let today = K.startOfDay(for: Date())
-                if dC >= today {continue}
-                let archivedTodo = ArchivedTodo(context: context)
-                archivedTodo.text = todo.text
-                archivedTodo.blnStarred = todo.blnStarred
-                archivedTodo.dtmCompleted = dtmCompleted
-                archivedTodo.dtmDue = todo.dtmDue
-                archivedTodo.dtmCreated = todo.dtmCreated
-                self.context.delete(todo)
-                try! self.context.save()
-            }
+        for todo in todos where todo.dtmCompleted != nil {
+            let dC = F.startOfDay(for: todo.dtmCompleted!)
+            let today = F.startOfDay(for: Date())
+            if dC >= today {continue}
+            let archivedTodo = ArchivedTodo(context: context)
+            archivedTodo.text = todo.text
+            archivedTodo.blnStarred = todo.blnStarred
+            archivedTodo.dtmCompleted = todo.dtmCompleted!
+            archivedTodo.dtmDue = todo.dtmDue
+            archivedTodo.dtmCreated = todo.dtmCreated
+            self.context.delete(todo)
+            try! self.context.save()
         }
     }
     
     private func initSubviews() {
-        // dimView setup
-        dimView = UIView()
-        dimView.frame = view.frame
-        view.addSubview(dimView)
-        dimView.backgroundColor = UIColor(white: 0, alpha: 0.4)
-        dimView.alpha = 0
-        dimView.isHidden = true
-        
-//         invisibleView setup
-//        invisibleView = UIView()
-//        invisibleView.frame = view.frame
-//        view.addSubview(invisibleView)
-//        invisibleView.backgroundColor = UIColor(white: 1, alpha: 0)
-//        invisibleView.isHidden = true
+        headerView.heightAnchor.constraint(equalToConstant: view.frame.height/8).isActive = true
+        dimView = F.setupDimView(for: self, with: #selector(handleDismiss))
         
         // todoCardVC setup
         todoCardVC = TodoCardViewController(nibName: "TodoCard", bundle: nil)
         self.addChild(todoCardVC)
         view.addSubview(todoCardVC.view)
         todoCardVC.view.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: cardHeight)
-        todoCardVC.view.clipsToBounds = true
         todoCardVC.view.layer.cornerRadius = 12
         
         // rescheduleVC setup
@@ -177,24 +170,13 @@ class ViewController: UIViewController {
         swipeGestureRecognizer.direction = .down
         let tapGestureRecogizer = UITapGestureRecognizer(target: self, action: #selector(dismissUndo))
         tapGestureRecogizer.cancelsTouchesInView = false
-
-        dimView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
         todoCardVC.handleArea.addGestureRecognizer(swipeGestureRecognizer)
         addTodoBtn.addGestureRecognizer(tapGestureRecogizer)
         
         undoDeleteBtn.frame.origin.x = -100
     }
     
-    func handleEdit(for todos:[Todo], at index:Int) {
-        // setup card properties
-        let todo = todos[index]
-        todoCardVC.index = index
-        todoCardVC.todoTextView.text = todo.text
-        todoCardVC.blnStarred = todo.blnStarred
-        if todo.dtmDue != nil {
-            todoCardVC.blnDue = true
-//            TODO: todoCardVC.datePicker.date = todo.dtmDue!
-        }
+    func handleEdit() {
         // setup card views
         todoCardVC.todoTextView.isHidden = false
         todoCardVC.todoTextField.isHidden = true
@@ -214,11 +196,6 @@ class ViewController: UIViewController {
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.todoCardVC.view.frame.origin.y = self.view.frame.height
             })
-            // Reset todoCard
-            todoCardVC.blnDue = false
-            todoCardVC.blnStarred = false
-            todoCardVC.todoTextField.text = ""
-            todoCardVC.index = nil
         } else {
             rescheduleVC.view.isHidden = true
             calendarVC.view.isHidden = true
@@ -256,10 +233,11 @@ class ViewController: UIViewController {
     
     // MARK: - @IBAction functions
     @IBAction func addTodo(_ sender: Any?) {
+        todoCardVC.todo = nil
         DispatchQueue.main.async {
             if let text = sender as? String {
                 self.todoCardVC.todoTextField.text = text
-            }
+            } else {self.todoCardVC.setupCard()}
             self.todoCardVC.todoTextView.isHidden = true
             self.todoCardVC.todoTextField.isHidden = false
             self.dimView.isHidden = false
@@ -293,6 +271,7 @@ class ViewController: UIViewController {
                            "mode":source.mode, "canComplete":source.canComplete,
                            "blnStarted":source.blnStarted, "active":true]
         }
+        UIApplication.shared.isIdleTimerDisabled = false
     }
 }
 
@@ -324,7 +303,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        handleEdit(for: todos, at: indexPath.row)
+        handleEdit()
+        todoCardVC.todo = todos[indexPath.row]
+        todoCardVC.setupCard()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -393,7 +374,16 @@ extension ViewController: CellDelegate {
         dismissUndo()
         if let index = todoTableView.indexPath(for: cell)?.row {
             let todo = todos[index]
-            todo.dtmCompleted = todo.dtmCompleted == nil ? Date() : nil
+            if todo.dtmCompleted == nil {
+                todo.dtmCompleted = Date()
+                if Int(completedCount.text!)! != Int(goalCount.text!)! - 1 {
+                    audioPlayer.currentTime = 0
+                    audioPlayer.play()
+                    F.feedback(.rigid)
+                } else {
+                    AudioServicesPlayAlertSound(SystemSoundID(1262))
+                }
+            } else {todo.dtmCompleted = nil}
             try! self.context.save()
             self.fetchTodos()
         }

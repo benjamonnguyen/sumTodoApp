@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TimeViewController" customModule="todo" customModuleProvider="target">
+            <connections>
+                <outlet property="cancelBtn" destination="SmX-cp-hYC" id="J2Y-aQ-ROV"/>
+                <outlet property="clearBtn" destination="1te-fE-fZ5" id="v4g-Od-SPb"/>
+                <outlet property="doneBtn" destination="etR-jw-GqA" id="mDl-iM-nKm"/>
+                <outlet property="timePicker" destination="Tr5-i3-UMb" id="c0B-3e-qcG"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view hidden="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="5" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="Tr5-i3-UMb">
+                    <rect key="frame" x="0.0" y="82" width="414" height="216"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </datePicker>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1te-fE-fZ5">
+                    <rect key="frame" x="20" y="49" width="40" height="33"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <state key="normal" title="Clear"/>
+                    <connections>
+                        <action selector="clear:" destination="-1" eventType="touchUpInside" id="yNt-E2-RKs"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SmX-cp-hYC">
+                    <rect key="frame" x="63" y="303" width="53" height="33"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <state key="normal" title="Cancel"/>
+                    <connections>
+                        <action selector="cancel:" destination="-1" eventType="touchUpInside" id="NpU-XW-DsL"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="etR-jw-GqA">
+                    <rect key="frame" x="297" y="303" width="41" height="33"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <state key="normal" title="Done"/>
+                    <connections>
+                        <action selector="done:" destination="-1" eventType="touchUpInside" id="zoe-0M-SbY"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="Tr5-i3-UMb" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="1fE-Hz-unx"/>
+                <constraint firstItem="1te-fE-fZ5" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="5" id="L7r-Dx-VPa"/>
+                <constraint firstItem="etR-jw-GqA" firstAttribute="top" secondItem="Tr5-i3-UMb" secondAttribute="bottom" constant="5" id="Qmg-Dc-WZe"/>
+                <constraint firstItem="Tr5-i3-UMb" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="UAr-ZW-JkK"/>
+                <constraint firstItem="1te-fE-fZ5" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="XdO-ui-C7m"/>
+                <constraint firstItem="Tr5-i3-UMb" firstAttribute="top" secondItem="1te-fE-fZ5" secondAttribute="bottom" id="eq2-kZ-n2o"/>
+                <constraint firstItem="SmX-cp-hYC" firstAttribute="top" secondItem="Tr5-i3-UMb" secondAttribute="bottom" constant="5" id="fsS-QF-y6B"/>
+                <constraint firstItem="Tr5-i3-UMb" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="yZo-xi-Lrz"/>
+            </constraints>
+            <point key="canvasLocation" x="39" y="54"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

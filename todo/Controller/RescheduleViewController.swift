@@ -42,21 +42,14 @@ class RescheduleViewController: UIViewController {
             newComponents.hour = originalComponents.hour
             newComponents.minute = originalComponents.minute
         }
-        let newDate = calendar.date(from: newComponents)
-        DispatchQueue.main.async {
-            todo.dtmDue = newDate
-            try! par.context.save()
-            par.fetchTodos()
-        }
+        todo.dtmDue = calendar.date(from: newComponents)
+        try! par.context.save()
+        par.fetchTodos()
         par.handleDismiss()
     }
     
     @IBAction private func rescheduleToday(_ sender: UIButton) {
         reschedule(days: 0)
-        // TODO: time
-        //        var todayComponents = calendar.dateComponents([.day, .month, .year, .hour, .minute], from: Date())
-        //        todayComponents.hour = nil
-        //        todayComponents.minute = nil
     }
     @IBAction private func rescheduleTmr(_ sender: UIButton) {
         reschedule(days: 1)

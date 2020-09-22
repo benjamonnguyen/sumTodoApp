@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -28,13 +30,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="37K-1k-rHC" userLabel="handleArea">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="38.5"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="28.5"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="NWv-gH-aCV">
-                    <rect key="frame" x="20" y="38.5" width="374" height="0.0"/>
+                    <rect key="frame" x="20" y="28.5" width="374" height="0.0"/>
                     <subviews>
-                        <textField hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="What's next on the chopping block?" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ajv-xb-hNn">
+                        <textField hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="What's next on the chopping block?" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ajv-xb-hNn">
                             <rect key="frame" x="0.0" y="0.0" width="523.5" height="35"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="35" id="Lak-7x-vXP"/>
@@ -44,11 +46,11 @@
                         </textField>
                         <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" text="Lorem ipsum dfdfdfdfdsfdsafdsfdsfdsfadsfdsfdsfdsafdasfadsfadsfadsfadsf" translatesAutoresizingMaskIntoConstraints="NO" id="Uk8-w6-pk6">
                             <rect key="frame" x="0.0" y="0.0" width="523.5" height="70"/>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="70" id="2a7-kd-UxF"/>
                             </constraints>
-                            <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <color key="textColor" systemColor="labelColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <textInputTraits key="textInputTraits" keyboardType="twitter"/>
                         </textView>
@@ -65,18 +67,18 @@
                     <state key="normal" backgroundImage="minus" catalog="system"/>
                 </button>
                 <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hy8-I8-Mcz">
-                    <rect key="frame" x="73.5" y="51.5" width="33.5" height="29"/>
+                    <rect key="frame" x="73.5" y="41.5" width="33.5" height="29"/>
                     <fontDescription key="fontDescription" type="system" pointSize="1"/>
                     <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <state key="normal" image="calendar" catalog="system">
                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="22" scale="large" weight="semibold"/>
                     </state>
                     <connections>
-                        <action selector="toggleDue:" destination="-1" eventType="touchUpInside" id="q1P-ZP-0vq"/>
+                        <action selector="toggleCalendar:" destination="-1" eventType="touchUpInside" id="q1P-ZP-0vq"/>
                     </connections>
                 </button>
                 <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLE-tm-lPe">
-                    <rect key="frame" x="358" y="51.5" width="31" height="30"/>
+                    <rect key="frame" x="358" y="41.5" width="31" height="30"/>
                     <color key="tintColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="paperplane.fill" catalog="system">
                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large" weight="bold"/>
@@ -86,7 +88,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MSk-kz-oWx">
-                    <rect key="frame" x="20" y="50" width="33.5" height="31"/>
+                    <rect key="frame" x="20" y="40" width="33.5" height="31"/>
                     <color key="tintColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="star" catalog="system">
                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large" weight="bold"/>
@@ -113,7 +115,8 @@
                     </subviews>
                 </stackView>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="vLE-tm-lPe" secondAttribute="trailing" constant="25" id="0Xc-yQ-qju"/>
                 <constraint firstItem="QEI-sO-hnA" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="1Of-hH-UtB"/>
@@ -129,17 +132,22 @@
                 <constraint firstItem="hy8-I8-Mcz" firstAttribute="leading" secondItem="MSk-kz-oWx" secondAttribute="trailing" constant="20" id="fi4-pn-r2d"/>
                 <constraint firstItem="MSk-kz-oWx" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="gAz-9D-erR"/>
                 <constraint firstAttribute="trailing" secondItem="NWv-gH-aCV" secondAttribute="trailing" constant="20" id="hy4-eu-m2r"/>
-                <constraint firstItem="NWv-gH-aCV" firstAttribute="top" secondItem="QEI-sO-hnA" secondAttribute="bottom" constant="10" id="imy-tF-G4Z"/>
+                <constraint firstItem="NWv-gH-aCV" firstAttribute="top" secondItem="QEI-sO-hnA" secondAttribute="bottom" id="imy-tF-G4Z"/>
                 <constraint firstItem="hy8-I8-Mcz" firstAttribute="top" secondItem="NWv-gH-aCV" secondAttribute="bottom" constant="13" id="qst-Qs-TDi"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="85.507246376811594" y="287.94642857142856"/>
         </view>
     </objects>
     <resources>
         <image name="calendar" catalog="system" width="128" height="106"/>
         <image name="minus" catalog="system" width="128" height="24"/>
-        <image name="paperplane.fill" catalog="system" width="128" height="121"/>
+        <image name="paperplane.fill" catalog="system" width="128" height="118"/>
         <image name="star" catalog="system" width="128" height="116"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>
