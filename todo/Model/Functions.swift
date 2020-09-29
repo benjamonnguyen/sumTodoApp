@@ -10,7 +10,14 @@ import UIKit
 
 class F {
     static func startOfDay(for date:Date) -> Date {
-        Calendar.current.startOfDay(for: date)
+        return Calendar.current.startOfDay(for: date)
+    }
+    
+    static func endOfDay(for date:Date) -> Date {
+        var newDate = startOfDay(for: date)
+        newDate = Calendar.current.date(byAdding: .hour, value: 23, to: newDate)!
+        newDate = Calendar.current.date(byAdding: .minute, value: 59, to: newDate)!
+        return newDate
     }
     
     static func setupDimView(for viewController:UIViewController, with action: Selector) -> UIView {

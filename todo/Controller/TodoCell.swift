@@ -13,11 +13,13 @@ class TodoCell:UITableViewCell {
     @IBOutlet weak var checkBtn: UIButton!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var todoLabel: UILabel!
+    @IBOutlet weak var recurIcon: UIImageView!
     
     weak var delegate: CellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        recurIcon.tintColor = K.lightGray
     }
     
     private func strikethru(_ text: String, reverse: Bool) -> NSMutableAttributedString {
@@ -25,11 +27,11 @@ class TodoCell:UITableViewCell {
         if reverse == false {
             attributes = [
                 .font: UIFont.systemFont(ofSize: K.fontSize),
-                .foregroundColor: #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)]
+                .foregroundColor: K.lightGray]
         } else {
             attributes = [
                 .font: UIFont.systemFont(ofSize: K.fontSize),
-                .foregroundColor: #colorLiteral(red: 0.2458492062, green: 0.2458492062, blue: 0.2458492062, alpha: 1)]
+                .foregroundColor: K.darkGray]
         }
         let attributedText =  NSMutableAttributedString(string: text, attributes: attributes)
         if reverse == false {
@@ -42,7 +44,7 @@ class TodoCell:UITableViewCell {
         let blnCompleted = todo.dtmCompleted != nil
         
         // Check box
-        checkBtn.tintColor = todo.blnStarred ? K.secondaryLightColor : #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+        checkBtn.tintColor = todo.blnStarred ? K.secondaryLightColor : K.lightGray
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: K.fontSize, weight: .semibold)
         let image = blnCompleted ? UIImage(systemName: "checkmark.square", withConfiguration: symbolConfig) : UIImage(systemName: "square", withConfiguration: symbolConfig)
         checkBtn.setImage(image, for: .normal)
@@ -60,11 +62,18 @@ class TodoCell:UITableViewCell {
             dateLabel.text = date
         } else {dateLabel.text = ""}
         
+        // Icons
+        if todo.recur != "None" {
+            recurIcon.isHidden = false
+        } else {
+            recurIcon.isHidden = true
+        }
+        
         todoLabel.attributedText = strikethru(todo.text ?? "", reverse: !blnCompleted)
         
         // Gray out if blnCompleted
         if blnCompleted {
-            checkBtn.tintColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+            checkBtn.tintColor = K.lightGray
             dateLabel.text = ""
             selectionStyle = .none
         } else {selectionStyle = .gray}

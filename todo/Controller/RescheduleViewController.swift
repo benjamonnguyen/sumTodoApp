@@ -16,11 +16,12 @@ class RescheduleViewController: UIViewController {
     @IBOutlet weak var thisSatBtn: UIButton!
     @IBOutlet weak var clearBtn: UIButton!
     
-    var index:Int!
+    var todo:Todo!
+    var par:ViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        par = (parent as! ViewController)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "d"
         let todayDate = dateFormatter.string(from: Date())
@@ -32,17 +33,14 @@ class RescheduleViewController: UIViewController {
     }
     
     private func reschedule(days:Int) {
-        let par = parent as! ViewController
-        let todo = par.todos[index]
-        let calendar = Calendar.current
-        var newComponents = calendar.dateComponents([.day, .month, .year, .hour, .minute], from: Date())
+        var newComponents = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute], from: Date())
         if let originalDate = todo.dtmDue {
-            let originalComponents = calendar.dateComponents([.hour, .minute], from: originalDate)
+            let originalComponents = Calendar.current.dateComponents([.hour, .minute], from: originalDate)
             newComponents.day! += days
             newComponents.hour = originalComponents.hour
             newComponents.minute = originalComponents.minute
         }
-        todo.dtmDue = calendar.date(from: newComponents)
+        todo.dtmDue = Calendar.current.date(from: newComponents)
         try! par.context.save()
         par.fetchTodos()
         par.handleDismiss()
@@ -63,13 +61,10 @@ class RescheduleViewController: UIViewController {
         reschedule(days: days.day!)
     }
     @IBAction private func clearDueDate(_ sender: UIButton) {
-        let par = parent as! ViewController
-        let todo = par.todos[index]
-        DispatchQueue.main.async {
-            todo.dtmDue = nil
-            try! par.context.save()
-            par.fetchTodos()
-        }
+        todo.dtmDue = nil
+        todo.blnTime = false
+        try! par.context.save()
+        par.fetchTodos()
         par.handleDismiss()
     }
 }

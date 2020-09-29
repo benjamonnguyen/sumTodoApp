@@ -12,7 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CalendarViewController" customModule="todo" customModuleProvider="target">
             <connections>
                 <outlet property="calendar" destination="7tN-DP-43N" id="8pF-FU-7C7"/>
-                <outlet property="calendarTable" destination="BY2-cW-uL9" id="pnS-i8-L9G"/>
+                <outlet property="calendarTableView" destination="BY2-cW-uL9" id="pnS-i8-L9G"/>
                 <outlet property="cancelBtn" destination="PM0-CY-RVy" id="cjj-ns-mVD"/>
                 <outlet property="clearBtn" destination="oI8-tm-gvy" id="3PJ-3u-PpD"/>
                 <outlet property="doneBtn" destination="Ie6-dh-JxQ" id="JCE-WQ-xsI"/>

@@ -19,6 +19,7 @@
 		B16233D1250EC2AC00AB1F32 /* CalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B16233CF250EC2AC00AB1F32 /* CalendarView.xib */; };
 		B16233D42510641E00AB1F32 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16233D22510641E00AB1F32 /* CalendarCell.swift */; };
 		B16233D52510641E00AB1F32 /* CalendarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B16233D32510641E00AB1F32 /* CalendarCell.xib */; };
+		B19645A42521610E005A1026 /* TodoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19645A32521610E005A1026 /* TodoHeaderView.swift */; };
 		B1B0AAB325155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0AAB125155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift */; };
 		B1B0AAB425155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0AAB225155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift */; };
 		B1B0AACA2516DA5500F7EFA3 /* TimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B0AAC82516DA5500F7EFA3 /* TimeViewController.swift */; };
@@ -54,6 +55,9 @@
 		B16233CF250EC2AC00AB1F32 /* CalendarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarView.xib; sourceTree = "<group>"; };
 		B16233D22510641E00AB1F32 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		B16233D32510641E00AB1F32 /* CalendarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarCell.xib; sourceTree = "<group>"; };
+		B1964599251DD1A8005A1026 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = "../../realm-swift-5.4.3/ios/swift-12.0/RealmSwift.framework"; sourceTree = "<group>"; };
+		B196459D251DD1AB005A1026 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = "../../realm-swift-5.4.3/ios/swift-12.0/Realm.framework"; sourceTree = "<group>"; };
+		B19645A32521610E005A1026 /* TodoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoHeaderView.swift; sourceTree = "<group>"; };
 		B1B0AAB125155E6300F7EFA3 /* ArchivedTodo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivedTodo+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		B1B0AAB225155E6300F7EFA3 /* ArchivedTodo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivedTodo+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		B1B0AAC82516DA5500F7EFA3 /* TimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +93,8 @@
 		63B3BD6E5B25844C98B664DF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B196459D251DD1AB005A1026 /* Realm.framework */,
+				B1964599251DD1A8005A1026 /* RealmSwift.framework */,
 				264CA946A68F9F47435A5299 /* Pods_todo.framework */,
 			);
 			name = Frameworks;
@@ -137,6 +143,7 @@
 				B16233CF250EC2AC00AB1F32 /* CalendarView.xib */,
 				B16233D32510641E00AB1F32 /* CalendarCell.xib */,
 				B1B0AAC92516DA5500F7EFA3 /* TimeView.xib */,
+				B19645A32521610E005A1026 /* TodoHeaderView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -185,8 +192,8 @@
 				B1F5467E24FC863A00A24F16 /* AppDelegate.swift */,
 				B1F5468024FC863A00A24F16 /* SceneDelegate.swift */,
 				B14D44ED24FF5092000B4DAE /* Model */,
-				B14D44EE24FF50A9000B4DAE /* Controller */,
 				B14D44EF24FF50B2000B4DAE /* View */,
+				B14D44EE24FF50A9000B4DAE /* Controller */,
 				B16233C1250DEF8500AB1F32 /* CoreData */,
 				B1B0AAD4251992B400F7EFA3 /* Assets */,
 				B1F5468A24FC864200A24F16 /* Assets.xcassets */,
@@ -331,6 +338,7 @@
 				B1F5467F24FC863A00A24F16 /* AppDelegate.swift in Sources */,
 				B1F5468124FC863A00A24F16 /* SceneDelegate.swift in Sources */,
 				B13427FA250A728700A58C25 /* RescheduleViewController.swift in Sources */,
+				B19645A42521610E005A1026 /* TodoHeaderView.swift in Sources */,
 				B1B0AADC251A9D9000F7EFA3 /* Functions.swift in Sources */,
 				B1F5468924FC863A00A24F16 /* todo.xcdatamodeld in Sources */,
 				B13427F4250930FB00A58C25 /* FocusViewController.swift in Sources */,

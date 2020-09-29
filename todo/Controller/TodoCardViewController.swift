@@ -25,6 +25,7 @@ class TodoCardViewController: UIViewController {
     var blnStarred = false
     var blnTime = false
     var dtmDue:Date? = nil
+    var recur = "None"
     var todo:Todo?
     var par:ViewController!
     
@@ -46,23 +47,22 @@ class TodoCardViewController: UIViewController {
         DispatchQueue.main.async {
             let starImage = self.blnStarred ? UIImage(systemName: "star.fill") : UIImage(systemName: "star")
             self.starBtn.setImage(starImage, for: .normal)
-            if self.dtmDue != nil {
-                if self.blnTime {self.timeLabel.isHidden = false}
+            if let dtmDue = self.dtmDue {
                 self.dateLabel.isHidden = false
                 self.dueBtn.tintColor = K.secondaryLightColor
-                if let date = self.dtmDue {
-                    self.dateLabel.text = F.dateFormatter.string(from: date)
-                    if self.blnTime {
-                        self.timeLabel.text = F.timeFormatter.string(from: date)
-                    }
-                    let overdue = F.startOfDay(for: date) < F.startOfDay(for: Date())
-                    if overdue {
-                        self.dateLabel.textColor = K.red
-                        self.timeLabel.textColor = K.red
-                    } else {
-                        self.dateLabel.textColor = K.lightGray
-                        self.timeLabel.textColor = K.lightGray
-                    }
+                self.dateLabel.text = F.dateFormatter.string(from: dtmDue)
+                if self.blnTime {
+                    self.timeLabel.isHidden = false
+                    self.timeLabel.text = F.timeFormatter.string(from: dtmDue)
+                } else {
+                    self.timeLabel.isHidden = true
+                }
+                if F.startOfDay(for: dtmDue) < F.startOfDay(for: Date()) {
+                    self.dateLabel.textColor = K.red
+                    self.timeLabel.textColor = K.red
+                } else {
+                    self.dateLabel.textColor = K.lightGray
+                    self.timeLabel.textColor = K.lightGray
                 }
             } else {
                 self.dueBtn.tintColor = K.lightGray
@@ -77,12 +77,14 @@ class TodoCardViewController: UIViewController {
         if let todo = self.todo {
             todoTextView.text = todo.text
             blnTime = todo.blnTime
+            recur = todo.recur
             dtmDue = todo.dtmDue
             blnStarred = todo.blnStarred
         } else {
-            todoTextView.text = ""
-            todoTextField.text = ""
+            todoTextView.text = nil
+            todoTextField.text = nil
             blnTime = false
+            recur = "None"
             dtmDue = nil
             blnStarred = false
         }
@@ -92,10 +94,10 @@ class TodoCardViewController: UIViewController {
     private func checkForChange() {
         if let todo = self.todo {
             if blnStarred != todo.blnStarred || blnTime != todo.blnTime ||
-                (todoTextView.text != todo.text && todoTextView.text != "") ||
-                dtmDue != todo.dtmDue {saveBtn.isEnabled = true}
+                (todoTextView.text != todo.text && todoTextView.text.count > 0) ||
+                recur != todo.recur || dtmDue != todo.dtmDue {saveBtn.isEnabled = true}
             else {saveBtn.isEnabled = false}
-        } else {saveBtn.isEnabled = todoTextField.text != "" ? true : false}
+        } else {saveBtn.isEnabled = todoTextField.text?.count ?? 0 > 0 ? true : false}
     }
     
     @objc private func textFieldDidChange(textField:UITextField) {
@@ -116,16 +118,22 @@ class TodoCardViewController: UIViewController {
         })
         par.calendarVC.calendar.select(dtmDue ?? Date())
         par.calendarVC.timeComponents = blnTime ? Calendar.current.dateComponents([.hour, .minute], from: dtmDue!) : nil
-        par.calendarVC.calendarTable.reloadData()
+        par.calendarVC.recur = recur
+        par.calendarVC.calendarTableView.reloadData()
     }
     
     @IBAction private func saveTodo(_ sender: Any) {
-        let todo = self.todo == nil ? Todo(context: par.context) : self.todo!
-        if todo.dtmCreated == nil {todo.dtmCreated = Date()}
-        todo.text = todoTextField.text! != "" ? todoTextField.text! : todoTextView.text!
+        let todo = self.todo ?? Todo(context: par.context)
+        if todo.dtmCreated == nil {
+            todo.dtmCreated = Date()
+            todo.text = todoTextField.text!
+        } else {
+            todo.text = todoTextView.text!
+        }
         todo.blnStarred = blnStarred
         todo.dtmDue = dtmDue
         todo.blnTime = blnTime
+        todo.recur = recur
         F.feedback(.soft)
         try! par.context.save()
         par.fetchTodos()

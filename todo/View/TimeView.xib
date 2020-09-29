@@ -14,7 +14,9 @@
                 <outlet property="cancelBtn" destination="SmX-cp-hYC" id="J2Y-aQ-ROV"/>
                 <outlet property="clearBtn" destination="1te-fE-fZ5" id="v4g-Od-SPb"/>
                 <outlet property="doneBtn" destination="etR-jw-GqA" id="mDl-iM-nKm"/>
+                <outlet property="recurTableView" destination="QRF-hC-QQA" id="6xx-L4-Rer"/>
                 <outlet property="timePicker" destination="Tr5-i3-UMb" id="c0B-3e-qcG"/>
+                <outlet property="titleLabel" destination="VNS-oW-F7H" id="eLv-2c-1fm"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -24,7 +26,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="5" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="Tr5-i3-UMb">
-                    <rect key="frame" x="0.0" y="82" width="414" height="216"/>
+                    <rect key="frame" x="0.0" y="330" width="414" height="216"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </datePicker>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1te-fE-fZ5">
@@ -35,36 +37,58 @@
                         <action selector="clear:" destination="-1" eventType="touchUpInside" id="yNt-E2-RKs"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SmX-cp-hYC">
-                    <rect key="frame" x="63" y="303" width="53" height="33"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SmX-cp-hYC">
+                    <rect key="frame" x="63" y="809" width="53" height="33"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <state key="normal" title="Cancel"/>
                     <connections>
                         <action selector="cancel:" destination="-1" eventType="touchUpInside" id="NpU-XW-DsL"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="etR-jw-GqA">
-                    <rect key="frame" x="297" y="303" width="41" height="33"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="etR-jw-GqA">
+                    <rect key="frame" x="297" y="809" width="41" height="33"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <state key="normal" title="Done"/>
                     <connections>
                         <action selector="done:" destination="-1" eventType="touchUpInside" id="zoe-0M-SbY"/>
                     </connections>
                 </button>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QRF-hC-QQA">
+                    <rect key="frame" x="10" y="363" width="394" height="150"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="150" placeholder="YES" id="INb-r4-Dwu"/>
+                    </constraints>
+                </tableView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Repeat" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VNS-oW-F7H">
+                    <rect key="frame" x="176.5" y="64" width="61.5" height="23"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="19"/>
+                    <color key="textColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="Tr5-i3-UMb" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="1fE-Hz-unx"/>
+                <constraint firstItem="SmX-cp-hYC" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="63" placeholder="YES" id="26O-8i-B1N"/>
                 <constraint firstItem="1te-fE-fZ5" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="5" id="L7r-Dx-VPa"/>
-                <constraint firstItem="etR-jw-GqA" firstAttribute="top" secondItem="Tr5-i3-UMb" secondAttribute="bottom" constant="5" id="Qmg-Dc-WZe"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="QRF-hC-QQA" secondAttribute="trailing" constant="10" id="QPN-Sa-9ys"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="etR-jw-GqA" secondAttribute="bottom" constant="20" id="Qmg-Dc-WZe"/>
                 <constraint firstItem="Tr5-i3-UMb" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="UAr-ZW-JkK"/>
+                <constraint firstItem="VNS-oW-F7H" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="UJC-i1-RQA"/>
+                <constraint firstItem="QRF-hC-QQA" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="10" id="XAO-LU-ITh"/>
+                <constraint firstItem="QRF-hC-QQA" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="XDs-XN-YoJ"/>
                 <constraint firstItem="1te-fE-fZ5" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="XdO-ui-C7m"/>
-                <constraint firstItem="Tr5-i3-UMb" firstAttribute="top" secondItem="1te-fE-fZ5" secondAttribute="bottom" id="eq2-kZ-n2o"/>
-                <constraint firstItem="SmX-cp-hYC" firstAttribute="top" secondItem="Tr5-i3-UMb" secondAttribute="bottom" constant="5" id="fsS-QF-y6B"/>
+                <constraint firstItem="VNS-oW-F7H" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="cFQ-g5-YvI"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="SmX-cp-hYC" secondAttribute="bottom" constant="20" id="fsS-QF-y6B"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="etR-jw-GqA" secondAttribute="trailing" constant="76" placeholder="YES" id="nHC-ce-OdM"/>
+                <constraint firstItem="Tr5-i3-UMb" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-10" id="v3D-rp-Hu8"/>
+                <constraint firstItem="QRF-hC-QQA" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-10" id="wxC-AV-yEF"/>
                 <constraint firstItem="Tr5-i3-UMb" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="yZo-xi-Lrz"/>
             </constraints>
-            <point key="canvasLocation" x="39" y="54"/>
+            <point key="canvasLocation" x="37.681159420289859" y="53.571428571428569"/>
         </view>
     </objects>
     <resources>

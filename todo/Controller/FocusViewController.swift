@@ -22,6 +22,7 @@ class FocusViewController: UIViewController {
     @IBOutlet weak var checkBtn: UIButton!
     @IBOutlet weak var sessionsStackView: UIStackView!
     
+    private var audioPlayer = AVAudioPlayer()
     private let timerSpeed: CFTimeInterval = 1.0 // use to speed up timer speed for testing
     private let modeToColor = ["focus":#colorLiteral(red: 0.1803921569, green: 0.5843137255, blue: 0.6, alpha: 1), "break":#colorLiteral(red: 0.3137254902, green: 0.5882352941, blue: 0.9411764706, alpha: 1), "longBreak":#colorLiteral(red: 0.3137254902, green: 0.5882352941, blue: 0.9411764706, alpha: 1)]
     var mode = "focus"
@@ -58,6 +59,9 @@ class FocusViewController: UIViewController {
         durationPicker.delegate = self
         durationPicker.dataSource = self
         if blnStarted {startTimer()}
+        // Audio setup
+        audioPlayer = try! AVAudioPlayer(contentsOf: K.completeDingURL)
+        audioPlayer.prepareToPlay()
     }
     
     override func viewDidLayoutSubviews() {
@@ -330,6 +334,9 @@ class FocusViewController: UIViewController {
     
     @IBAction func completeTask(_ sender: UIButton) {
         checkBtn.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
+        audioPlayer.currentTime = 0
+        audioPlayer.play()
+        F.feedback(.rigid)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 3000)) {
             self.performSegue(withIdentifier: "CompleteTask", sender: nil)
         }

@@ -17,11 +17,13 @@ extension ArchivedTodo {
         return NSFetchRequest<ArchivedTodo>(entityName: "ArchivedTodo")
     }
 
-    @NSManaged public var blnStarred: Bool
-    @NSManaged public var dtmCompleted: Date?
-    @NSManaged public var dtmCreated: Date?
-    @NSManaged public var dtmDue: Date?
     @NSManaged public var text: String?
+    @NSManaged public var dtmCreated: Date?
+    @NSManaged public var dtmCompleted: Date?
+    @NSManaged public var dtmDue: Date?
+    @NSManaged public var blnStarred: Bool
+    @NSManaged public var blnTime: Bool
+    @NSManaged public var recur: String
 
 }
 

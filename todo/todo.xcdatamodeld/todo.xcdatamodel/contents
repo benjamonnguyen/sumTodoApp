@@ -2,9 +2,11 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="ArchivedTodo" representedClassName="ArchivedTodo" syncable="YES">
         <attribute name="blnStarred" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="blnTime" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="dtmCompleted" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dtmCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dtmDue" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="recur" optional="YES" attributeType="String"/>
         <attribute name="text" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Todo" representedClassName="Todo" syncable="YES">
@@ -13,10 +15,11 @@
         <attribute name="dtmCompleted" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dtmCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dtmDue" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="recur" attributeType="String" defaultValueString="None"/>
         <attribute name="text" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="ArchivedTodo" positionX="-63" positionY="27" width="128" height="118"/>
-        <element name="Todo" positionX="-63" positionY="-18" width="128" height="133"/>
+        <element name="ArchivedTodo" positionX="-63" positionY="27" width="128" height="148"/>
+        <element name="Todo" positionX="-63" positionY="-18" width="128" height="148"/>
     </elements>
 </model>

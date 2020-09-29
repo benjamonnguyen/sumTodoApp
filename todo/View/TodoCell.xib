@@ -36,25 +36,46 @@
                             <action selector="checkTodo:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="q7l-Oe-hbN"/>
                         </connections>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Sept 30" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IX2-W3-kf3">
-                        <rect key="frame" x="250" y="14" width="60" height="16"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ayx-N0-6ct" userLabel="Detail Stack View">
+                        <rect key="frame" x="250" y="7.5" width="60" height="29.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Sept 30" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IX2-W3-kf3">
+                                <rect key="frame" x="0.0" y="0.0" width="60" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="8Ah-6q-iIs"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="zVx-67-w1N" userLabel="Icon Stack View">
+                                <rect key="frame" x="45.5" y="15" width="14.5" height="14.5"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow.2.circlepath" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Bft-PL-Sgo" userLabel="Recur Image View">
+                                        <rect key="frame" x="0.0" y="0.0" width="14.5" height="14.5"/>
+                                        <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="14.5" id="ajn-o2-LMT"/>
+                                            <constraint firstAttribute="height" constant="14.5" id="usa-Pd-EMC"/>
+                                        </constraints>
+                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="11" weight="ultraLight"/>
+                                    </imageView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="8Ah-6q-iIs"/>
+                            <constraint firstAttribute="width" constant="60" id="2zy-3c-Di3"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    </stackView>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="ayx-N0-6ct" firstAttribute="leading" secondItem="e7L-lA-SbQ" secondAttribute="trailing" constant="5" id="49a-Ka-Bkh"/>
                     <constraint firstAttribute="bottom" secondItem="aSx-Zc-UZj" secondAttribute="bottom" constant="7" id="Evz-iD-FS1"/>
-                    <constraint firstAttribute="bottom" secondItem="IX2-W3-kf3" secondAttribute="bottom" constant="14" id="Ihd-Z3-1F1"/>
-                    <constraint firstAttribute="trailing" secondItem="IX2-W3-kf3" secondAttribute="trailing" constant="10" id="JMK-Td-t6s"/>
-                    <constraint firstItem="IX2-W3-kf3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="14" id="KaZ-s7-03P"/>
                     <constraint firstAttribute="bottom" secondItem="e7L-lA-SbQ" secondAttribute="bottom" constant="11" id="XGa-cH-s7C"/>
+                    <constraint firstAttribute="trailing" secondItem="ayx-N0-6ct" secondAttribute="trailing" constant="10" id="Yb7-cD-ssV"/>
                     <constraint firstItem="e7L-lA-SbQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="cTo-NR-RrY"/>
                     <constraint firstItem="aSx-Zc-UZj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="dAd-XJ-HtA"/>
-                    <constraint firstItem="IX2-W3-kf3" firstAttribute="leading" secondItem="e7L-lA-SbQ" secondAttribute="trailing" constant="5" id="n5b-0F-BC2"/>
+                    <constraint firstItem="ayx-N0-6ct" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="nX0-dM-MU7"/>
                     <constraint firstItem="e7L-lA-SbQ" firstAttribute="leading" secondItem="aSx-Zc-UZj" secondAttribute="trailing" constant="8" id="qEJ-mO-zrH"/>
                     <constraint firstItem="aSx-Zc-UZj" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="wy1-Te-IAY"/>
                 </constraints>
@@ -63,12 +84,14 @@
             <connections>
                 <outlet property="checkBtn" destination="aSx-Zc-UZj" id="RFh-rW-ed1"/>
                 <outlet property="dateLabel" destination="IX2-W3-kf3" id="6mG-gB-MGb"/>
+                <outlet property="recurIcon" destination="Bft-PL-Sgo" id="aBo-iM-OtW"/>
                 <outlet property="todoLabel" destination="e7L-lA-SbQ" id="9TE-JH-v9f"/>
             </connections>
-            <point key="canvasLocation" x="132" y="107"/>
+            <point key="canvasLocation" x="131.8840579710145" y="106.47321428571428"/>
         </tableViewCell>
     </objects>
     <resources>
+        <image name="arrow.2.circlepath" catalog="system" width="128" height="101"/>
         <image name="square" catalog="system" width="128" height="114"/>
     </resources>
 </document>

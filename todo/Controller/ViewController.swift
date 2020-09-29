@@ -21,7 +21,11 @@ class ViewController: UIViewController {
     
     var audioPlayer = AVAudioPlayer()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var todos: [Todo] = []
+    var today:[Todo] = []
+    var inbox:[Todo] = []
+    var upcoming:[Todo] = []
+    var completed:[Todo] = []
+    var todoSections:[[Todo]] = []
     
     var activeTimer:[String:Any?] = ["todo":nil, "min":0, "sec":0,
                                      "session":1, "strokeEnd":0,
@@ -66,9 +70,7 @@ class ViewController: UIViewController {
         )
         
         // Audio setup
-        let soundPath = Bundle.main.path(forResource: "completeDing", ofType: "wav")
-        let url = URL(fileURLWithPath: soundPath!)
-        audioPlayer = try! AVAudioPlayer(contentsOf: url)
+        audioPlayer = try! AVAudioPlayer(contentsOf: K.completeDingURL)
         audioPlayer.prepareToPlay()
     }
     
@@ -94,42 +96,91 @@ class ViewController: UIViewController {
     
     // MARK: - Class functions
     func fetchTodos() {
-        todos = try! context.fetch(Todo.fetchRequest())
-        self.todos.sort {$0.dtmCreated! < $1.dtmCreated!}
-        self.todos.sort {
-            if $0.dtmDue != nil && $1.dtmDue == nil {return true}
-            if let zero = $0.dtmDue, let one = $1.dtmDue {return zero < one}
+        
+        let todos = try! context.fetch(Todo.fetchRequest()) as! [Todo]
+        
+        today = todos.filter {
+            if let dtmDue = $0.dtmDue {
+                if dtmDue < K.tomorrow && $0.dtmCompleted == nil {
+                    return true
+                }
+            }
             return false
         }
-        self.todos.sort {$0.blnStarred && !$1.blnStarred}
-        self.todos.sort {
-            if $0.dtmCompleted == nil && $1.dtmCompleted != nil {return true}
-            if let zero = $0.dtmCompleted, let one = $1.dtmCompleted {return zero < one}
+        today = sort(today, byPriority: false)
+        
+        inbox = todos.filter {
+            $0.dtmCompleted == nil && $0.dtmDue == nil
+        }
+        inbox = sort(inbox, byPriority: true)
+        
+        upcoming = todos.filter {
+            if let dtmDue = $0.dtmDue {
+                if dtmDue >= K.tomorrow && $0.dtmCompleted == nil {
+                    return true
+                }
+            }
             return false
         }
-        self.todoTableView.reloadData()
-        let completed = todos.filter { todo in
-            if todo.dtmCompleted != nil {return true}
-            return false
+        upcoming = sort(upcoming, byPriority: true)
+        
+        completed = todos.filter {
+            $0.dtmCompleted != nil
         }
+        completed.sort {
+            $0.dtmCompleted! < $1.dtmCompleted!
+        }
+
+        todoSections = [today, inbox, upcoming, completed]
+        
+        todoTableView.reloadData()
+        
         DispatchQueue.main.async {
-            self.goalCount.text = "\(max(5, self.todos.count))"
-            self.completedCount.text = "\(completed.count)"
+            self.goalCount.text = "\(max(5, self.today.count + self.completed.count))"
+            self.completedCount.text = "\(self.completed.count)"
         }
     }
     
+    private func copyOf(_ todo:Todo) -> Todo {
+        let copy = Todo(context: context)
+        copy.blnStarred = todo.blnStarred
+        copy.blnTime = todo.blnTime
+        copy.dtmCompleted = todo.dtmCompleted
+        copy.dtmCreated = todo.dtmCreated
+        copy.dtmDue = todo.dtmDue
+        copy.recur = todo.recur
+        copy.text = todo.text
+        return copy
+    }
+    
+    private func sort(_ todos:[Todo], byPriority:Bool) -> [Todo] {
+        var sortedTodos = todos
+        sortedTodos.sort {$0.dtmCreated! < $1.dtmCreated!}
+        if !byPriority {sortedTodos.sort {$0.blnStarred && !$1.blnStarred}}
+        sortedTodos.sort {
+            if var zero = $0.dtmDue, var one = $1.dtmDue {
+                if !$0.blnTime {zero = F.endOfDay(for: zero)}
+                if !$1.blnTime {one = F.endOfDay(for: one)}
+                return zero < one
+            }
+            return false
+        }
+        if byPriority {sortedTodos.sort {$0.blnStarred && !$1.blnStarred}}
+        return sortedTodos
+    }
+    
     private func archiveCompletedTodos() {
-        todos = try! context.fetch(Todo.fetchRequest())
-        for todo in todos where todo.dtmCompleted != nil {
-            let dC = F.startOfDay(for: todo.dtmCompleted!)
-            let today = F.startOfDay(for: Date())
-            if dC >= today {continue}
+        fetchTodos()
+        for todo in completed {
+            if F.startOfDay(for: todo.dtmCompleted!) >= F.startOfDay(for: Date()) {continue}
             let archivedTodo = ArchivedTodo(context: context)
             archivedTodo.text = todo.text
             archivedTodo.blnStarred = todo.blnStarred
             archivedTodo.dtmCompleted = todo.dtmCompleted!
             archivedTodo.dtmDue = todo.dtmDue
             archivedTodo.dtmCreated = todo.dtmCreated
+            archivedTodo.blnTime = todo.blnTime
+            archivedTodo.recur = todo.recur
             self.context.delete(todo)
             try! self.context.save()
         }
@@ -160,7 +211,7 @@ class ViewController: UIViewController {
         self.addChild(calendarVC)
         view.addSubview(calendarVC.view)
         calendarVC.view.alpha = 0
-        calendarVC.view.frame.size = CGSize(width: view.frame.width-50, height: view.frame.height/1.5)
+        calendarVC.view.frame.size = CGSize(width: view.frame.width-50, height: 600)
         calendarVC.view.center = view.center
         calendarVC.view.layer.cornerRadius = 12
         
@@ -177,7 +228,6 @@ class ViewController: UIViewController {
     }
     
     func handleEdit() {
-        // setup card views
         todoCardVC.todoTextView.isHidden = false
         todoCardVC.todoTextField.isHidden = true
         dimView.isHidden = false
@@ -248,6 +298,12 @@ class ViewController: UIViewController {
             self.todoCardVC.view.frame.origin.y = self.view.frame.height - self.keyboardHeight - self.cardHeight + 45
             self.dimView.alpha = 1
         })
+        if UserDefaults.standard.bool(forKey: "todaySelected") {
+            DispatchQueue.main.async {
+                self.todoCardVC.dtmDue = Date()
+                self.todoCardVC.refreshCard()
+            }
+        }
     }
     
     @IBAction func undoDelete(_ sender: UIButton) {
@@ -278,25 +334,45 @@ class ViewController: UIViewController {
 // MARK: - Extensions
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = TodoHeaderView()
+        headerView.tableView = tableView
+        headerView.setupHeaderView(for: K.todoSectionNames[section],
+                                   sectionCount: todoSections[section].count)
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section > 1 && todoSections[section].count == 0 {
+            return 0
+        }
+        return tableView.sectionHeaderHeight
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return todoSections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todos.count
+        if section == K.todoSectionNames.firstIndex(of: "upcoming") && !UserDefaults.standard.bool(forKey: "showUpcoming") {
+            return 0
+        } else if section == K.todoSectionNames.firstIndex(of: "completed") && !UserDefaults.standard.bool(forKey: "showCompleted") {
+            return 0
+        }
+        return todoSections[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoCell", for: indexPath) as! TodoCell
-        let todo = todos[indexPath.row]
+        let todo = todoSections[indexPath.section][indexPath.row]
         cell.delegate = self
         cell.setupCell(todo)
         return cell
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        print(todos[indexPath.row].description)
-        if todos[indexPath.row].dtmCompleted != nil {
+        print(todoSections[indexPath.section][indexPath.row].description)
+        if indexPath.section == K.todoSectionNames.firstIndex(of: "completed") {
             return nil
         }
         return indexPath
@@ -304,15 +380,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         handleEdit()
-        todoCardVC.todo = todos[indexPath.row]
+        todoCardVC.todo = todoSections[indexPath.section][indexPath.row]
         todoCardVC.setupCard()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        //Delete
         let delete = UIContextualAction(style: .destructive, title: "") { (action, view, completionHandler) in
-            self.context.delete(self.todos[indexPath.row])
+            self.context.delete(self.todoSections[indexPath.section][indexPath.row])
             self.fetchTodos()
             self.undoDeleteBtn.frame.origin.y = self.addTodoBtn.frame.origin.y
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
@@ -322,9 +397,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         }
         let imgConfig = UIImage.SymbolConfiguration(pointSize: 17, weight: .bold, scale: .large)
         delete.image = UIImage(systemName: "trash.fill", withConfiguration: imgConfig)
-        // Reschedule
+        
         let reschedule = UIContextualAction(style: .normal, title: "") { (action, view, completionHandler) in
-            self.rescheduleVC.index = indexPath.row
+            self.rescheduleVC.todo = self.todoSections[indexPath.section][indexPath.row]
             self.dimView.isHidden = false
             self.rescheduleVC.view.isHidden = false
             UIView.animate(withDuration: 0.4, delay: 0, animations: {
@@ -335,14 +410,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         }
         reschedule.image = UIImage(systemName: "calendar", withConfiguration: imgConfig)
         reschedule.backgroundColor = K.secondaryLightColor
-        // Focus
+        
         let focus = UIContextualAction(style: .normal, title: "") { (action, view, completionHandler) in
-            self.performSegue(withIdentifier: "FocusSegue", sender: self.todos[indexPath.row])
+            self.performSegue(withIdentifier: "FocusSegue", sender: self.todoSections[indexPath.section][indexPath.row])
             completionHandler(true)
         }
         focus.image = UIImage(systemName: "timer", withConfiguration: imgConfig)
         focus.backgroundColor = #colorLiteral(red: 0.1803921569, green: 0.5843137255, blue: 0.6, alpha: 1)
-        if todos[indexPath.row].dtmCompleted != nil {
+        
+        if indexPath.section == K.todoSectionNames.firstIndex(of: "completed") {
             return UISwipeActionsConfiguration(actions: [delete])
         }
         return UISwipeActionsConfiguration(actions: [delete, reschedule, focus])
@@ -372,9 +448,33 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 extension ViewController: CellDelegate {
     func didCheck(_ cell:TodoCell) {
         dismissUndo()
-        if let index = todoTableView.indexPath(for: cell)?.row {
-            let todo = todos[index]
+        if let indexPath = todoTableView.indexPath(for: cell) {
+            let todo = todoSections[indexPath.section][indexPath.row]
             if todo.dtmCompleted == nil {
+                if let dtmDue = todo.dtmDue {
+                    var newDtmDue:Date?
+                    switch todo.recur {
+                    case "None":
+                        break
+                    case "Daily":
+                        newDtmDue = Calendar.current.date(byAdding: .day, value: 1, to: dtmDue)
+                    case "Weekdays":
+                        repeat {
+                            newDtmDue = Calendar.current.date(byAdding: .day, value: 1, to: dtmDue)
+                        } while Calendar.current.isDateInWeekend(newDtmDue!)
+                    case "Weekly":
+                        newDtmDue = Calendar.current.date(byAdding: .day, value: 7, to: dtmDue)
+                    case "Monthly":
+                        newDtmDue = Calendar.current.date(byAdding: .day, value: 35, to: dtmDue)
+                    default:
+                        print("No case found for \(todo.recur)")
+                    }
+                    if newDtmDue != nil {
+                        let newTodo = copyOf(todo)
+                        newTodo.dtmCreated = Date()
+                        newTodo.dtmDue = newDtmDue
+                    }
+                }
                 todo.dtmCompleted = Date()
                 if Int(completedCount.text!)! != Int(goalCount.text!)! - 1 {
                     audioPlayer.currentTime = 0

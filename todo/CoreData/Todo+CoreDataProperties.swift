@@ -13,7 +13,7 @@ import CoreData
 
 extension Todo {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Todo> {
+    @nonobjc public class func fetchRequest(_ sortDescriptors:[NSSortDescriptor]?, _ predicates:NSCompoundPredicate?) -> NSFetchRequest<Todo> {
         return NSFetchRequest<Todo>(entityName: "Todo")
     }
 
@@ -23,5 +23,6 @@ extension Todo {
     @NSManaged public var dtmDue: Date?
     @NSManaged public var blnStarred: Bool
     @NSManaged public var blnTime: Bool
+    @NSManaged public var recur: String
     
 }

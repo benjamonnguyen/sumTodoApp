@@ -30,6 +30,7 @@ class CalendarCell: UITableViewCell {
     // Adds spacing between cells
     override func layoutSubviews() {
         contentView.frame.size.height += 30
+        iconImage.centerXAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -25).isActive = true
         super.layoutSubviews()
     }
 }
