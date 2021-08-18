@@ -24,7 +24,6 @@
   <img src="https://github.com/benjamonnguyen/todoApp/blob/3477d550fb7077573df0b5ffb2c45086dc0e8cbb/demo/reschedule.png" width="300" title="reschedule">
 </div>
 <div style="display:flex;">
-  <img src="https://github.com/benjamonnguyen/todoApp/blob/3477d550fb7077573df0b5ffb2c45086dc0e8cbb/demo/timer.png" width="300" title="timer">
   <img src="https://github.com/benjamonnguyen/todoApp/blob/3477d550fb7077573df0b5ffb2c45086dc0e8cbb/demo/timer_change.png" width="300" title="timer_change">
   <img src="https://github.com/benjamonnguyen/todoApp/blob/3477d550fb7077573df0b5ffb2c45086dc0e8cbb/demo/timer_running.png" width="300" title="timer_running">
 </div>
